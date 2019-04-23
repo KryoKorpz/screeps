@@ -20,7 +20,7 @@ module.exports.loop = function () {
     }
     
     var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
-    if (repairers.length < 1) {
+    if (repairers.length < 2) {
         console.log('Repairers: ' + repairers.length);
     }
     
@@ -36,7 +36,7 @@ module.exports.loop = function () {
 
     // Creep Spawners
     
-    if(repairers.length < 1 && Game.rooms['W25N21'].energyAvailable  < 550) {
+    if(repairers.length < 2 && Game.rooms['W25N21'].energyAvailable <= 450  <= 550) {
         var newName = 'Repairer' + Game.time;
         console.log('Spawning new repairer: ' + newName);
         Game.spawns['Spawn1'].spawnCreep([WORK, WORK, CARRY, MOVE, MOVE, MOVE ], newName,
