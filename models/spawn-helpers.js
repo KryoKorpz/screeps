@@ -2,19 +2,26 @@ const nonAttackPartBuilder = (availEnergyCapacity) => {
     const workPartEnergy = Math.floor(availEnergyCapacity/2/100);
     const remainingPartEnergy = Math.ceil(availEnergyCapacity/4/50)
     const partList = [];
-    for (let i = 0; i <= workPartEnergy; i++) {
-    partList.push(WORK)
+    let partCost = 0
+    for (let i = 0; i < workPartEnergy; i++) {
+    partList.push(WORK);
+    partCost += 100;
     }
     
     for (let i = 1; i < remainingPartEnergy; i++) {
-    partList.push(CARRY)
+    partList.push(CARRY);
+    partCost += 50;
     }
     
     for (let i = 0; i < remainingPartEnergy; i++) {
-    partList.push(MOVE)
+    partList.push(MOVE);
+    partCost += 50;
     }
     
-    return partList
+    return {
+        partList, 
+        partCost
+    }
 }
 
 const creepRoleCounter = (creepRole, creepRoles, spawnCount, availEnergy, availEnergyCapacity) => {
@@ -29,16 +36,18 @@ const creepRoleCounter = (creepRole, creepRoles, spawnCount, availEnergy, availE
 const creepNonAttackSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc) => {
         const availEnergy = Game.rooms[gameRoom].energyAvailable;
         const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
-        const partList = nonAttackPartBuilder(availEnergyCapacity);
-        const partListLength = partList.length
+        const parts = nonAttackPartBuilder(availEnergyCapacity);
+        const partListLength = parts.partList.length
+        const partCost = parts.partCost
+        
         
         if (creepRoles.length < spawnCount && availEnergy === availEnergyCapacity) {
             var newName = creepRole + Game.time;
-            console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength);
-            const result = Game.spawns[spawnLoc].spawnCreep(partList, newName,
+            console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength + " Part Cost: " + partCost + "/" + availEnergy);
+            const result = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,
                     {memory: {role: creepRole}})
                 if (result != OK) {
-                    console.log("error code: " + result)
+                    console.log("error code: " + result);
                 }
             }
 }
@@ -47,11 +56,14 @@ const creepRepairerSpawn = (creepRole, creepRoles, spawnCount, gameRoom, altEner
         const availEnergy = Game.rooms[gameRoom].energyAvailable;
         const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
 
-        if (creepRoles.length < spawnCount && availEnergy <= altEnergy <= availEnergyCapacity) {
+        if (creepRoles.length < spawnCount && availEnergy >= altEnergy <= availEnergyCapacity) {
             var newName = creepRole + Game.time;
             console.log('Spawning new ' + creepRole + " " + newName);
-            Game.spawns[spawnLoc].spawnCreep([WORK, WORK, CARRY, MOVE, MOVE, MOVE], newName,
+            const result =Game.spawns[spawnLoc].spawnCreep([WORK, WORK, CARRY, MOVE, MOVE, MOVE], newName,
                 {memory: {role: creepRole}})
+                if(result != OK) {
+                    console.log("error code: " + result);
+                }
         }
 }
 
