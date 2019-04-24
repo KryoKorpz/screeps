@@ -5,6 +5,8 @@ var roleRepairer = require('role-repairer');
 var spawnHelpers = require('spawn-helpers')
 
 module.exports.loop = function () {
+    const availEnergy = Game.rooms['W25N21'].energyAvailable
+    const availEnergyCapacity = Game.rooms['W25N21'].energyCapacityAvailable
     
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
@@ -12,6 +14,7 @@ module.exports.loop = function () {
             console.log('Clearing non-existing creep memory:', name);
         }
     }
+    
     // Creep Count Sets
     const harvesterMax = 5
     const repairerMax = 2
@@ -19,27 +22,29 @@ module.exports.loop = function () {
     const builderMax = 4
     
     // Creep count trackers
-    var harvesters = spawnHelpers.creepRoleCounter('harvester', 'harvesters', harvesterMax);
-    var repairers = spawnHelpers.creepRoleCounter('repairer', 'repairers', repairerMax);
-    var upgraders = spawnHelpers.creepRoleCounter('upgrader', 'upgraders', upgraderMax);
-    var builders = spawnHelpers.creepRoleCounter('builder', 'builders', builderMax)
+    const harvesters = spawnHelpers.creepRoleCounter('harvester', 'harvesters', harvesterMax, availEnergy, availEnergyCapacity);
+    const repairers = spawnHelpers.creepRoleCounter('repairer', 'repairers', repairerMax, availEnergy, availEnergyCapacity);
+    const upgraders = spawnHelpers.creepRoleCounter('upgrader', 'upgraders', upgraderMax, availEnergy, availEnergyCapacity);
+    const builders = spawnHelpers.creepRoleCounter('builder', 'builders', builderMax, availEnergy, availEnergyCapacity)
+        
+
     
     // Creep Spawners
     
     if(repairers.length < repairerMax) {
-        spawnHelpers.creepRoleRepairerSpawn('repairer', repairers, repairerMax, 'W25N21', 450, 'Spawn1')
+        spawnHelpers.creepRepairerSpawn('repairer', repairers, repairerMax, 'W25N21', 450, 'Spawn1')
     } 
     
     else if (harvesters.length < harvesterMax) {
-        spawnHelpers.creepRoleHarvesterSpawn('harvester', harvesters, harvesterMax, 'W25N21', 'Spawn1')
+        spawnHelpers.creepNonAttackSpawn('harvester', harvesters, harvesterMax, 'W25N21', 'Spawn1')
     }
     
     else if (upgraders.length < upgraderMax) {
-        spawnHelpers.creepRoleUpgraderSpawn('upgrader', upgraders, upgraderMax, 'W25N21', 'Spawn1')
+        spawnHelpers.creepNonAttackSpawn('upgrader', upgraders, upgraderMax, 'W25N21', 'Spawn1')
     }
     
     else if (builders.length < builderMax) {
-        spawnHelpers.creepRoleBuilderSpawn('builder', builders, builderMax, 'W25N21', 'Spawn1')
+        spawnHelpers.creepNonAttackSpawn('builder', builders, builderMax, 'W25N21', 'Spawn1')
     }
     
     
