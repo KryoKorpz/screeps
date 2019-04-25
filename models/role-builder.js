@@ -2,7 +2,18 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        creep.memory.role = 'builder'
+        
+        // const locatedTombstones = creep.room.find(FIND_TOMBSTONES);
+        // if(locatedTombstones.length) {
+        //     for(let i = 0; i < locatedTombstones.length; i++) {
+        //         const range = creep.pos.getRangeTo(locatedTombstones[i]);
+        //         if(range <= 5) {
+        //             if(creep.withdraw(locatedTombstones[i] == ERR_NOT_IN_RANGE)) {
+        //                 creep.moveTo(locatedTombstones[i], {visualizePathStyle: {stroke: '##0000FF'}})
+        //             }
+        //         }
+        //     }
+        // }
 
 	    if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
@@ -25,8 +36,8 @@ var roleBuilder = {
 	    }
 	    else {
 	        var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[1], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
 	}
