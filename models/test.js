@@ -1,14 +1,15 @@
 const harvestPartBuilder = (availEnergyCapacity) => {
-    const workPartEnergy = (availEnergyCapacity - 100)/100;
+    const workPartEnergy = availEnergyCapacity - 200;
+    const workPartCount = workPartEnergy/100
+    const remainingPartEnergy = availEnergyCapacity - workPartEnergy
     const partList = [];
     let partCost = 0
-    for (let i = 0; i < workPartEnergy; i++) {
+    for (let i = 0; i < workPartCount; i++) {
         partList.push('WORK');
         partCost += 100;
-        }
-
-    partList.push('MOVE')
-    partCost += 50
+        partList.push('MOVE')
+        partCost += 50
+    }
     
     partList.push('CARRY')
     partCost += 50
