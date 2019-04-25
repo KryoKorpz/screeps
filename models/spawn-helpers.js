@@ -25,7 +25,7 @@ const nonAttackPartBuilder = (availEnergyCapacity) => {
 }
 
 const harvestPartBuilder = (availEnergyCapacity) => {
-    const workPartEnergy = Math.floor(availEnergyCapacity*.75/100);
+    const workPartEnergy = Math.floor(availEnergyCapacity*.9/100);
     const remainingPartEnergy = Math.ceil(availEnergyCapacity*.5/50)
     const partList = [];
     let partCost = 0
@@ -50,7 +50,7 @@ const harvestPartBuilder = (availEnergyCapacity) => {
 
 const creepRoleCounter = (creepRole, creepRoles, spawnCount, availEnergy, availEnergyCapacity) => {
     creepRoles = _.filter(Game.creeps, (creep) => creep.memory.role == creepRole);
-    if (creepRoles.length < spawnCount && availEnergy === availEnergyCapacity) {
+    if (creepRoles.length < spawnCount && availEnergy >= availEnergyCapacity) {
         console.log(creepRole + "s: " + creepRoles.length)
         return creepRoles
     }
@@ -61,6 +61,24 @@ const creepNonAttackSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnL
         const availEnergy = Game.rooms[gameRoom].energyAvailable;
         const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
         const parts = nonAttackPartBuilder(availEnergyCapacity);
+        const partListLength = parts.partList.length
+        const partCost = parts.partCost
+        
+        if (creepRoles.length < spawnCount && availEnergy === availEnergyCapacity) {
+            var newName = creepRole + Game.time;
+            console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength + " Part Cost: " + partCost + "/" + availEnergy);
+            const result = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,
+                    {memory: {role: creepRole}})
+                if (result != OK) {
+                    console.log("error code: " + result);
+                }
+            }
+}
+
+const creepBigHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc) => {
+        const availEnergy = Game.rooms[gameRoom].energyAvailable;
+        const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
+        const parts = harvestPartBuilder(availEnergyCapacity);
         const partListLength = parts.partList.length
         const partCost = parts.partCost
         
@@ -75,18 +93,15 @@ const creepNonAttackSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnL
                 }
             }
 }
-
-const creepHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc) => {
-        const availEnergy = Game.rooms[gameRoom].energyAvailable;
-        const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
-        const parts = harvestPartBuilder(availEnergyCapacity);
+const creepHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
+        const parts = harvestPartBuilder(altEnergy);
         const partListLength = parts.partList.length
         const partCost = parts.partCost
         
-        
-        if (creepRoles.length < spawnCount && availEnergy === availEnergyCapacity) {
+        if (creepRoles.length < spawnCount && altEnergy <= Game.rooms[gameRoom].energyAvailable) {
             var newName = creepRole + Game.time;
-            console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength + " Part Cost: " + partCost + "/" + availEnergy);
+            console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength + " Part Cost: " + partCost + "/" + altEnergy);
+            console.log("Part list: " + parts.partList);
             const result = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,
                     {memory: {role: creepRole}})
                 if (result != OK) {
