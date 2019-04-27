@@ -19,35 +19,29 @@ var roleHarvester = {
         } 
 
 	    if(creep.carry.energy < 50) {
-                const halfFullRoomContainers = creep.room.find(FIND_STRUCTURES, {
+                const container1 = creep.room.find(FIND_STRUCTURES, {
                     filter:(structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER) &&
-                        (structure.id == '5cc185d42bc4d56965660444') ||
-                        (structure.id == '5cc1495d9ae56330f9f33526') &&
-                        (1000 < structure.store[RESOURCE_ENERGY] )
+                        (structure.id == '5cc185d42bc4d56965660444') 
                         }
                 })
-                const roomContainers = creep.room.find(FIND_STRUCTURES, {
+                const container2 = creep.room.find(FIND_STRUCTURES, {
                     filter:(structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER) &&
-                        (300 <= structure.store[RESOURCE_ENERGY] >= 1000 ) && 
-                        (structure.id == '5cc185d42bc4d56965660444') ||
                         (structure.id == '5cc1495d9ae56330f9f33526')
                         }
                 })
-                if(halfFullRoomContainers.length > 0) {
-                    if(creep.withdraw(halfFullRoomContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(halfFullRoomContainers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                if(container1[0].store[RESOURCE_ENERGY] >= 1000 && container1[0].store[RESOURCE_ENERGY] > container2[0].store[RESOURCE_ENERGY]) {
+                    if(creep.withdraw(container1[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(container1[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                     }
                 } else {
-                    if(roomContainers.length > 0) {
-                        if(creep.withdraw(roomContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(roomContainers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    {
+                        if(creep.withdraw(container2[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(container2[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                         }
                     }
                 }
-                                console.log('half', halfFullRoomContainers)
-                console.log('low', roomContainers)
             } else {
                 var targets = creep.room.find(FIND_STRUCTURES, {
                         filter: (structure) => {

@@ -35,7 +35,7 @@ module.exports.loop = function () {
     const miner2Max = 1
     const turretUpgraderMax = 0
     const creepKillerMax = 2
-    const upgradeRunnerMax = 1
+    const upgradeRunnerMax = 2
     
     // min levels
     const harvesterMin = 2
