@@ -36,23 +36,45 @@ var roleBuilder = {
             }
 	    }
 	    else {
-            const roomContainers = creep.room.find(FIND_STRUCTURES, {
-                filter:(structure) => {
-                    return (structure.structureType == STRUCTURE_CONTAINER) &&
-                    (structure.store[RESOURCE_ENERGY] >= 200) && structure.id != '5cc1dd1febbabb3564eef1f4'
-                    roomContainers.sort((a,b) => a.store[RESOURCE_ENERGY] - b.store[RESOURCE_ENERGY]);
+	        const mainStorage = creep.room.find(FIND_STRUCTURES, {
+	            filter: (structure) => {
+	                return structure.structureType == STRUCTURE_STORAGE &&
+	                structure.store[RESOURCE_ENERGY] > 6000;
+	            }
+	        })
+	        if(mainStorage.length > 0) {
+	               if(creep.withdraw(mainStorage[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(mainStorage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    }
+	        } else {
+                const container1 = creep.room.find(FIND_STRUCTURES, {
+                    filter:(structure) => {
+                        return (structure.structureType == STRUCTURE_CONTAINER) &&
+                        (structure.id == '5cc185d42bc4d56965660444') 
+                        }
+                })
+                const container2 = creep.room.find(FIND_STRUCTURES, {
+                    filter:(structure) => {
+                        return (structure.structureType == STRUCTURE_CONTAINER) &&
+                        (structure.id == '5cc1495d9ae56330f9f33526')
+                        }
+                })
+                
+                const avg1 = container1[0].store[RESOURCE_ENERGY] / container1[0].storeCapacity
+                const avg2 = container2[0].store[RESOURCE_ENERGY] / container2[0].storeCapacity
+                
+                if(avg1 > avg2) {
+                    if(creep.withdraw(container1[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(container1[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    }
+                } else {
+                    {
+                        if(creep.withdraw(container2[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(container2[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                        }
+                    }
                 }
-            })
-            if(roomContainers.length > 0) {
-                if(creep.withdraw(roomContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(roomContainers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-            } else {
-                var sources = creep.room.find(FIND_SOURCES);
-                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-            }
+	        }
         }
 	}
 };

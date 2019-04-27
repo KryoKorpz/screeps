@@ -10,6 +10,7 @@ var roleCreepKiller = require('role-creepKiller');
 var roleUpgradeRunner = require('role-upgradeRunner');
 var spawnHelpers = require('spawn-helpers');
 var towerController = require('tower-controller');
+var linkController = require('link-controller');
 
 
 module.exports.loop = function () {
@@ -26,21 +27,21 @@ module.exports.loop = function () {
     
     // Creep Count Sets
     // max levels
-    const harvesterMax = 4
+    const harvesterMax = 2
     const repairerMax = 0
-    const upgraderMax = 2
+    const upgraderMax = 0
     const builderMax = 2
-    const towerRunnerMax = 2
+    const towerRunnerMax = 1
     const minerMax = 1
     const miner2Max = 1
-    const turretUpgraderMax = 0
+    const turretUpgraderMax = 1
     const creepKillerMax = 2
-    const upgradeRunnerMax = 2
+    const upgradeRunnerMax = 1
     
     // min levels
     const harvesterMin = 2
     const repairerMin = 0
-    const upgraderMin = 1
+    const upgraderMin = 0
     const builderMin = 1
     const towerRunnerMin = 1
     const creepKillerMin = 1
@@ -71,14 +72,16 @@ module.exports.loop = function () {
     const hostiles = Game.rooms['W25N21'].find(FIND_HOSTILE_CREEPS)
     const hostilesInRange = []
     for(let i = 0; i < hostiles.length; i++) {
-        const tower = Game.rooms['W25N21'].find(FIND_STRUCTURES, {
+        const towers = Game.rooms['W25N21'].find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return structure.structureType == STRUCTURE_TOWER;
                     }
-            });
-        const inRange = tower[0].pos.getRangeTo(hostiles[i])
-        if(inRange < 10) {
-            hostilesInRange.push(hostiles[i])
+                });
+        for (let t = 0; t < towers.length; t++) {
+            const inRange = towers[t].pos.getRangeTo(hostiles[i])
+            if(inRange < 10) {
+                hostilesInRange.push(hostiles[i])
+            }
         }
     }
 
@@ -101,12 +104,12 @@ module.exports.loop = function () {
     }
     
     else if (turretUpgraders.length < turretUpgraderMin) {
-        spawnHelpers.creepMinerSpawn('turretUpgrader', turretUpgraders, turretUpgraderMin, 'W25N21', 'Spawn1', 600)
+        spawnHelpers.creepTurretUpgraderSpawn('turretUpgrader', turretUpgraders, turretUpgraderMin, 'W25N21', 'Spawn1', 1100)
 
     }
     
     else if(towerRunners.length < towerRunnerMin) {
-        spawnHelpers.creepNonAttackSpawn('towerRunner', towerRunners, towerRunnerMin, 'W25N21', 'Spawn1')
+        spawnHelpers.creepHarvesterSpawn('towerRunner', towerRunners, towerRunnerMin, 'W25N21', 'Spawn1', 550)
     }
     
     else if(repairers.length < repairerMin) {
@@ -160,10 +163,18 @@ module.exports.loop = function () {
     }
     
     // Tower run scripts
+    const towers = Game.rooms['W25N21'].find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return structure.structureType == STRUCTURE_TOWER;
+        }
+    });
+    for (let i = 0; i < towers.length; i++) {
+        towerController.run(towers[i]);
+    }
     
-    const tower1 = Game.getObjectById("5cc10edc84e06930eda124a7");
-    towerController.run(tower1)
-    
+    // Link run scripts
+    const uploadLink = Game.getObjectById('5cc4c4b1a0613307aa5b4c8c')
+    linkController.run(uploadLink)
     // Creep run scripts
     
         

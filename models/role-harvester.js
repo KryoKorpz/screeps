@@ -31,7 +31,9 @@ var roleHarvester = {
                         (structure.id == '5cc1495d9ae56330f9f33526')
                         }
                 })
-                if(container1[0].store[RESOURCE_ENERGY] >= 1000 && container1[0].store[RESOURCE_ENERGY] > container2[0].store[RESOURCE_ENERGY]) {
+                const avg1 = container1[0].store[RESOURCE_ENERGY] / container1[0].storeCapacity
+                const avg2 = container2[0].store[RESOURCE_ENERGY] / container2[0].storeCapacity
+                if(avg1 > avg2) {
                     if(creep.withdraw(container1[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(container1[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                     }

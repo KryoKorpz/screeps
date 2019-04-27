@@ -30,13 +30,13 @@ var towerController = {
         const repairRamparts = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_RAMPART) &&
-                    structure.hits <= 20000
+                    structure.hits <= 75000
             }
         })
         const repairWalls = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_WALL) &&
-                    structure.hits <= 20000
+                    structure.hits <= 75000
             }
         })
         if(tower.energy > 0) {

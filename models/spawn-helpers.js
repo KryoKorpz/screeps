@@ -128,6 +128,24 @@ const creepMinerSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, 
                 }
             }
 }
+const creepTurretUpgraderSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
+        
+        if (creepRoles.length < spawnCount && altEnergy <= Game.rooms[gameRoom].energyAvailable) {
+            var newName = creepRole + Game.time;
+            const testSpawn = Game.spawns[spawnLoc].spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE], newName,
+                { dryRun: true })
+            
+            if(testSpawn == OK) {
+                console.log(creepRole + "s: " + creepRoles.length)
+                console.log('Spawning new ' + creepRole + " " + newName);
+                const result = Game.spawns[spawnLoc].spawnCreep([WORK, WORK, WORK, WORK, WORK, CARRY, MOVE], newName,
+                        {memory: {role: creepRole}})
+                    if (result != OK) {
+                        console.log("error code: " + result);
+                    }
+                }
+            }
+}
 
 // const creepHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
 //         const parts = harvestPartBuilder(altEnergy);
