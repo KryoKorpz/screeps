@@ -2,20 +2,6 @@ var roleTowerRunner = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        
-        const locatedTombstones = creep.room.find(FIND_TOMBSTONES);
-        if(locatedTombstones.length) {
-            for(let i = 0; i < locatedTombstones.length; i++) {
-                if(locatedTombstones[i].store[RESOURCE_ENERGY] > 0){
-                    const range = creep.pos.getRangeTo(locatedTombstones[i]);
-                    if(range <= 5) {
-                        if(creep.withdraw(locatedTombstones[i], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(locatedTombstones[i], {visualizePathStyle: {stroke: '##0000FF'}})
-                        }
-                    }
-                }
-            }
-        }
 	    if(creep.carry.energy < 50) {
                 const container1 = creep.room.find(FIND_STRUCTURES, {
                     filter:(structure) => {
@@ -49,16 +35,26 @@ var roleTowerRunner = {
                     structure.store[RESOURCE_ENERGY] != structure.storeCapacity
                 }
             })
+            let extensions = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_EXTENSION ) &&
+                    structure.energy < structure.energyCapacity
+                }
+            })
 
             var towerTargets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_TOWER) &&
-                            structure.energy < structure.energyCapacity;
+                            structure.energy <= structure.energyCapacity-300;
                     }
             });
-            if(towerTargets.length > 0) {
+            if(towerTargets.length > 0 ) {
                 if(creep.transfer(towerTargets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(towerTargets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            } else if (extensions.length > 0) {
+                if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else {
                 if(creep.transfer(storageContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

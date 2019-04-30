@@ -45,8 +45,7 @@ var roleUpgrader = {
             const roomContainers = creep.room.find(FIND_STRUCTURES, {
                 filter:(structure) => {
                     return (structure.structureType == STRUCTURE_CONTAINER) &&
-                    (structure.store[RESOURCE_ENERGY] > 200 ) && structure.id != '5cc1dd1febbabb3564eef1f4'
-                    roomContainers.sort((a,b) => a.store[RESOURCE_ENERGY] - b.store[RESOURCE_ENERGY]);
+                    (structure.store[RESOURCE_ENERGY] > 200 ) && structure.id != '5cc2bc58734ecc60941c0d56'
                 }
             })
             if(upgradeContainer.store[RESOURCE_ENERGY] > 0) {

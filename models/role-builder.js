@@ -20,7 +20,7 @@ var roleBuilder = {
             creep.memory.building = false;
             creep.say('🔄 harvest');
 	    }
-	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
+	    if(!creep.memory.building && creep.carry.energy >= 50) {
 	        creep.memory.building = true;
 	        creep.say('🚧 build');
 	    }
@@ -39,7 +39,7 @@ var roleBuilder = {
 	        const mainStorage = creep.room.find(FIND_STRUCTURES, {
 	            filter: (structure) => {
 	                return structure.structureType == STRUCTURE_STORAGE &&
-	                structure.store[RESOURCE_ENERGY] > 6000;
+	                structure.store[RESOURCE_ENERGY];
 	            }
 	        })
 	        if(mainStorage.length > 0) {

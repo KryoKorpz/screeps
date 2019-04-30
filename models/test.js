@@ -17,7 +17,7 @@ const harvestPartBuilder = (availEnergyCapacity) => {
     }
 }
 
-const result1 = harvestPartBuilder(550)
+const result1 = harvestPartBuilder(1150)
 // const result2 = harvestPartBuilder(750)
 // const result3 = harvestPartBuilder(800)
 // const result4 = harvestPartBuilder(900)
@@ -28,5 +28,6 @@ console.log(result1.partCost)
 // console.log(result2.partCost)
 // console.log(result3.partList)
 // console.log(result3.partCost)
+
 // console.log(result4.partList)
 // console.log(result4.partCost)

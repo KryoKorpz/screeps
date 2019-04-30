@@ -13,7 +13,6 @@ var towerController = {
         const mediumRepairTargets = [];
         const closeRepairTargets = [];
         
-        
         for (let i = 0; i < repairTargets.length; i++) {
 
             if (repairTargets[i].hits <= repairTargets[i].hitsMax-800 && tower.pos.getRangeTo(repairTargets[i]) <= 5) {
@@ -23,20 +22,19 @@ var towerController = {
                 mediumRepairTargets.push(repairTargets[i])
             } 
             else if (repairTargets[i].hits <= repairTargets[i].hitsMax-200 && tower.pos.getRangeTo(repairTargets[i]) >= 20) {
-
                 distantRepairTargets.push(repairTargets[i])
             } 
         }
         const repairRamparts = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_RAMPART) &&
-                    structure.hits <= 75000
+                    structure.hits <= 100000
             }
         })
         const repairWalls = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_WALL) &&
-                    structure.hits <= 75000
+                    structure.hits <= 100000
             }
         })
         if(tower.energy > 0) {
