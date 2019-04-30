@@ -31,3 +31,9 @@ console.log(result1.partCost)
 
 // console.log(result4.partList)
 // console.log(result4.partCost)
+
+
+Game.spawns['Spawn1'].spawnCreep([TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK ], 'PioneerDefender',
+    {memory: {role: 'pioneerDefender'}})
+Game.spawns['Spawn1'].spawnCreep([CLAIM, MOVE ], 'PioneerConverter',
+    {memory: {role: 'pioneerConverter'}})
