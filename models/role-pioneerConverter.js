@@ -9,6 +9,9 @@ var rolePioneerConverter = {
                 if(creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller);
                 }
+                    if(creep.signController(creep.room.controller, "I think Winter has come and gone...") == ERR_NOT_IN_RANGE) {
+        creep.moveTo(creep.room.controller);
+    }
             }
         }
 	}

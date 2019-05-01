@@ -70,6 +70,28 @@ const creepNonAttackSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnL
                 }
             }
 }
+const creepPioneerSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
+        const availEnergy = Game.rooms[gameRoom].energyAvailable;
+        const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
+        const parts = nonAttackPartBuilder(altEnergy);
+        const partListLength = parts.partList.length
+        const partCost = parts.partCost
+
+        if (creepRoles.length < spawnCount && availEnergy >= altEnergy) {
+            var newName = creepRole + Game.time;
+            const testSpawn = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,
+                    {dryRun: true })
+            if(testSpawn == OK) {
+                console.log(creepRole + "s: " + creepRoles.length)
+                console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength + " Part Cost: " + partCost + "/" + availEnergy);
+                const result = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,
+                        {memory: {role: creepRole}})
+                    if (result != OK) {
+                        console.log("error code: " + result);
+                    }
+                }
+            }
+}
 
 const creepHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
         const parts = harvestPartBuilder(altEnergy);
@@ -102,7 +124,7 @@ const creepKillerSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc,
             if(testSpawn == OK) {
                 console.log(creepRole + "s: " + creepRoles.length)
                 console.log('Spawning new ' + creepRole + " " + newName);
-                const result = Game.spawns[spawnLoc].spawnCreep([TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
+                const result = Game.spawns[spawnLoc].spawnCreep([TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH,  MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, MOVE, ATTACK,], newName,
                         {memory: {role: creepRole}})
                     if (result != OK) {
                         console.log("error code: " + result);
@@ -252,5 +274,6 @@ module.exports = {
     creepKillerSpawn,
     creepTurretUpgraderSpawn,
     creepLinkMinerSpawn,
+    creepPioneerSpawn,
     
 };

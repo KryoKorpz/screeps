@@ -57,6 +57,7 @@ module.exports.loop = function () {
     
     // min levels
     const harvesterMin = 1
+    const eHarvesterMin = 1
     const repairerMin = 0
     const upgraderMin = 0
     const builderMin = 1
@@ -66,7 +67,7 @@ module.exports.loop = function () {
     const minerMin = 1
     const miner2Min = 1
     const upgradeRunnerMin = 0
-    const pioneerMin = 1
+    const pioneerMin = 2
     const pioneerBuilderMin = 1
     const pioneerWorkerMin = 1
     const pioneerTowerMin = 1
@@ -77,6 +78,7 @@ module.exports.loop = function () {
     // Creep count trackers
 
     const harvesters = spawnHelpers.creepRoleCounter('harvester', 'harvesters', harvesterMin, availEnergy, 1150);
+    const eHarvesters = spawnHelpers.creepRoleCounter('eHarvester', 'eHarvesters', eHarvesterMin, availEnergy, 400);
     const upgradeRunners = spawnHelpers.creepRoleCounter('upgradeRunner', 'upgradeRunners', upgradeRunnerMin, availEnergy, 550);
     const turretUpgraders = spawnHelpers.creepRoleCounter('turretUpgrader', 'turretUpgraders', turretUpgraderMin, availEnergy, 600);
     const miners = spawnHelpers.creepRoleCounter('miner', 'miners', minerMin, availEnergy, 700);
@@ -86,15 +88,15 @@ module.exports.loop = function () {
     const builders = spawnHelpers.creepRoleCounter('builder', 'builders', builderMin, availEnergy, availEnergyCapacity)
     const towerRunners = spawnHelpers.creepRoleCounter('towerRunner', 'towerRunners', towerRunnerMin, availEnergy, availEnergyCapacity)
     const creepKillers = spawnHelpers.creepRoleCounter('creepKiller', 'creepKillers', creepKillerMin, availEnergy, 650)
-    const pioneers = spawnHelpers.creepRoleCounter('pioneer', 'pioneers', pioneerMin, availEnergy, 650)
-    const pioneerWorkers = spawnHelpers.creepRoleCounter('pioneerWorker', 'pioneerWorkers', pioneerWorkerMin, availEnergy, 650)
-    const pioneerBuilders = spawnHelpers.creepRoleCounter('pioneerBuilder', 'pioneerBuilders', pioneerBuilderMin, availEnergy, 650)
-    const pioneerTowers = spawnHelpers.creepRoleCounter('pioneerTower', 'pioneerTowers', pioneerTowerMin, availEnergy, 650)
-    const pioneerRepairers = spawnHelpers.creepRoleCounter('pioneerRepairers', 'pioneerRepairers', pioneerRepairersMin, availEnergy, 650)
-    const pioneerUpgraders = spawnHelpers.creepRoleCounter('pioneerUpgraders', 'pioneerUpgraders', pioneerUpgradersMin, availEnergy, 650)
+    const pioneers = spawnHelpers.creepRoleCounter('pioneer', 'pioneers', pioneerMin, availEnergy, availEnergyCapacity)
+    const pioneerWorkers = spawnHelpers.creepRoleCounter('pioneerWorker', 'pioneerWorkers', pioneerWorkerMin, availEnergy, availEnergyCapacity)
+    const pioneerBuilders = spawnHelpers.creepRoleCounter('pioneerBuilder', 'pioneerBuilders', pioneerBuilderMin, availEnergy, availEnergyCapacity)
+    const pioneerTowers = spawnHelpers.creepRoleCounter('pioneerTower', 'pioneerTowers', pioneerTowerMin, availEnergy, availEnergyCapacity)
+    const pioneerRepairers = spawnHelpers.creepRoleCounter('pioneerRepairer', 'pioneerRepairers', pioneerRepairerMin, availEnergy, availEnergyCapacity)
+    const pioneerUpgraders = spawnHelpers.creepRoleCounter('pioneerUpgrader', 'pioneerUpgraders', pioneerUpgraderMin, availEnergy, availEnergyCapacity)
 
+    const pioneerCountTracker = pioneers.length + pioneerWorkers.length + pioneerBuilders.length + pioneerTowers.length
 
-    
     // Creep Spawners
     
     // Spawns creeps to meet min operating levels
@@ -117,6 +119,10 @@ module.exports.loop = function () {
 
     if(creepKillers.length < creepKillerMin && hostiles.length > 0 && hostilesInRange.length > 0) {
         spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W25N21', 'Spawn1', 650)
+    }
+    
+    else if(eHarvesters.length < eHarvesterMin) {
+        spawnHelpers.creepHarvesterSpawn('eHarvester', eHarvesters, eHarvesterMin, 'W25N21', 'Spawn1', 400)
     }
     else if(miners.length < minerMin) {
         spawnHelpers.creepLinkMinerSpawn('miner', miners, minerMax, 'W25N21', 'Spawn1', 700)
@@ -141,6 +147,8 @@ module.exports.loop = function () {
     else if(towerRunners.length < towerRunnerMin) {
         spawnHelpers.creepHarvesterSpawn('towerRunner', towerRunners, towerRunnerMin, 'W25N21', 'Spawn1', 550)
     }
+
+
     
     else if(repairers.length < repairerMin) {
         spawnHelpers.creepNonAttackSpawn('repairer', repairers, repairerMin, 'W25N21', 'Spawn1')
@@ -154,7 +162,8 @@ module.exports.loop = function () {
         spawnHelpers.creepNonAttackSpawn('builder', builders, builderMin, 'W25N21', 'Spawn1')
     }
 
-    else if (pioneers.length < pioneerMin && pioneerWorkers.length < pioneerWorkerMin && pioneerBuilders.length < pioneerBuilderMin && pioneerTowers.length < pioneerTowerMin) {
+
+    else if (pioneerCountTracker < pioneerMin) {
         spawnHelpers.creepNonAttackSpawn('pioneer', pioneers, pioneerMin, 'W25N21', 'Spawn1')
     }
     else if (pioneerRepairers.length < pioneerRepairerMin && pioneerUpgraders.length < pioneerUpgraderMin) {

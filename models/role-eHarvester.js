@@ -20,8 +20,9 @@ var roleEHarvester = {
                         creep.moveTo(mainStorage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                     }
     } else {
-                if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
+        end = extensions.length -1
+                if(creep.transfer(extensions[end], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(extensions[end], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
     }
     }
