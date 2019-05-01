@@ -9,6 +9,7 @@ var rolePioneerBuilder = {
                 structure.energy < structure.energyCapacity-300;
             }
         })
+        
         if( constructionSites.length > 0 && creep.carry.energy > 0) {
             if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(constructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
