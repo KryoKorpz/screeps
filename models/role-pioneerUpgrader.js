@@ -8,7 +8,7 @@ var pioneerUpgrader = {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else{
-                creep.memory.role = 'pioneerRepairer'
+                creep.memory.role = 'pioneerWorker'
             }
 	}
 };

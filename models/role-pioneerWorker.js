@@ -3,9 +3,21 @@ var rolePioneerWorker = {
     /** @param {Creep} creep **/
     run: function(creep) {
         const sourceContainer = Game.getObjectById('5cc973227680be3b982845d7')
-        const upgradeContainer = Game.getObjectById('5cc973227680be3b982845d7')
+        const upgradeContainer = Game.getObjectById('5cc9fc2c5bdcc824ce25115b')
         const locatedTombstones = creep.room.find(FIND_TOMBSTONES);
         const looseEnergy = creep.room.find(FIND_DROPPED_RESOURCES);
+        const repairRamparts = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_RAMPART) &&
+                    structure.hits <= 25000
+            }
+        })
+        const repairWalls = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_WALL) &&
+                    structure.hits <= 25000
+            }
+        })
         const sourceTombs = []
         const looseEnergyToPickUp = []
 	    if(creep.memory.working && creep.carry.energy == 0) {
@@ -59,7 +71,7 @@ var rolePioneerWorker = {
                     creep.moveTo(looseEnergyToPickUp[0], {visualizePathStyle: {stroke: '##0000FF'}})
                 }
             }
-    	    else if(sourceContainer.store[RESOURCE_ENERGY] > 200) {
+    	    else if(sourceContainer.store[RESOURCE_ENERGY] > creep.carryCapacity - creep.carry.energy) {
     	       if(creep.withdraw(sourceContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sourceContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
@@ -69,17 +81,27 @@ var rolePioneerWorker = {
                 }  
             }
         } else {
+
                 if(extensions.length > 0) {
-                        if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                                creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                        }
-                } 
+                    if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
+                }
                 else if ( constructionSites.length > 0) {
                         creep.memory.role = 'pioneerBuilder'
                 }
                 else if ( towers.length > 0){
                         creep.memory.role = 'pioneerTower'
-                } else {
+                }
+                else if (repairRamparts.length > 0 || repairWalls.length >0){
+                    creep.memory.role = 'pioneerRepairer'
+                }
+                else if (upgradeContainer.store[RESOURCE_ENERGY] < upgradeContainer.storeCapacity) {
+                        if(creep.transfer(upgradeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(upgradeContainer, {visualizePathStyle: {stroke: '#ffffff'}});
+                        }
+                }
+                else {
                     creep.memory.role = 'pioneerRepairer'
             }
         } 
