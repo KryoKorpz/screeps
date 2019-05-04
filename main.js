@@ -19,6 +19,7 @@ var rolePioneerDefender = require('role-pioneerDefender');
 var rolePioneerRepairer = require('role-pioneerRepairer');
 var rolePioneerUpgrader = require('role-pioneerUpgrader');
 var rolePioneerTurretUpgrader = require('role-pioneerTurretUpgrader');
+var rolePioneerTransport = require('role-pioneerTransport');
 var spawnHelpers = require('spawn-helpers');
 var towerController = require('tower-controller');
 var tower2Controller = require('tower2-controller');
@@ -55,7 +56,7 @@ module.exports.loop = function () {
     const minerMax = 1
     const miner2Max = 1
     const miner3Max = 1
-    const turretUpgraderMax = 3
+    const turretUpgraderMax = 1
     const creepKillerMax = 2
     const upgradeRunnerMax = 0
     
@@ -71,14 +72,15 @@ module.exports.loop = function () {
     const minerMin = 1
     const miner2Min = 1
     const miner3Min = 1
-    const upgradeRunnerMin = 1
-    const pioneerMin = 4
+    const upgradeRunnerMin = 0
+    const pioneerMin = 1
     const pioneerBuilderMin = 0
     const pioneerWorkerMin = 0
     const pioneerTowerMin = 0
     const pioneerUpgraderMin = 0
     const pioneerRepairerMin = 0
-    const pioneerTurretUpgraderMin = 0
+    const pioneerTurretUpgraderMin = 1
+    const pioneerTransportMin = 1
 
     
     // Creep count trackers
@@ -102,6 +104,7 @@ module.exports.loop = function () {
     const pioneerRepairers = spawnHelpers.creepRoleCounter('pioneerRepairer', 'pioneerRepairers', pioneerRepairerMin, availEnergy, availEnergyCapacity)
     const pioneerUpgraders = spawnHelpers.creepRoleCounter('pioneerUpgrader', 'pioneerUpgraders', pioneerUpgraderMin, availEnergy, availEnergyCapacity)
     const pioneerTurretUpgraders = spawnHelpers.creepRoleCounter('pioneerTurretUpgrader', 'pioneerTurretUpgraders', pioneerTurretUpgraderMin, availEnergy, availEnergyCapacity)
+    const pioneerTransports = spawnHelpers.creepRoleCounter('pioneerTransport', 'pioneerTransports', pioneerTransportMin, availEnergy, availEnergyCapacity)
 
     const pioneerCountTracker = pioneers.length + pioneerWorkers.length + pioneerBuilders.length + pioneerTowers.length + pioneerRepairers.length + pioneerUpgraders.length
     // Creep Spawners
@@ -144,10 +147,13 @@ module.exports.loop = function () {
     if(miners3.length < miner3Min) {
         spawnHelpers.creepMinerSpawn('miner3', miners3, miner3Max, 'W24N21', 'Spawn2', 600)
     }
-    
-    else if (pioneerCountTracker < pioneerMin ) {
-        spawnHelpers.creepNonAttackSpawn('pioneer', pioneers, pioneerMin, 'W24N21', 'Spawn2')
+    else if (pioneerTransports.length < pioneerTransportMin) {
+        spawnHelpers.creepHarvesterSpawn('pioneerTransport', pioneerTransports, pioneerTransportMin, 'W24N21', 'Spawn2', 1150)
     }
+    else if (pioneerCountTracker < pioneerMin ) {
+        spawnHelpers.creepPioneerSpawn('pioneer', pioneers, pioneerMin, 'W24N21', 'Spawn2', 1000)
+    }
+
     else if (pioneerTurretUpgraders.length < pioneerTurretUpgraderMin && room2UpgradeContainer.store[RESOURCE_ENERGY] == room2UpgradeContainer.storeCapacity) {
         spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader', pioneerTurretUpgraders, pioneerTurretUpgraderMin, 'W24N21', 'Spawn2', 800)
     }
@@ -238,6 +244,14 @@ module.exports.loop = function () {
             '🛠️' + spawningCreep.memory.role,
             Game.spawns['Spawn1'].pos.x + 1,
             Game.spawns['Spawn1'].pos.y,
+            {align: 'left', opacity: 0.8});
+    }
+    if(Game.spawns['Spawn2'].spawning) {
+        var spawningCreep = Game.creeps[Game.spawns['Spawn2'].spawning.name];
+        Game.spawns['Spawn2'].room.visual.text(
+            '🛠️' + spawningCreep.memory.role,
+            Game.spawns['Spawn2'].pos.x + 1,
+            Game.spawns['Spawn2'].pos.y,
             {align: 'left', opacity: 0.8});
     }
     
@@ -335,6 +349,9 @@ module.exports.loop = function () {
         }
         if(creep.memory.role == 'pioneerTurretUpgrader') {
             rolePioneerTurretUpgrader.run(creep);
+        }
+        if(creep.memory.role == 'pioneerTransport') {
+            rolePioneerTransport.run(creep);
         }
         if(creep.memory.role == 'miner3') {
             roleMiner3.run(creep);
