@@ -95,15 +95,18 @@ var roleHarvester = {
                 if(creep.transfer(towerTargets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(towerTargets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else if (upgradeContainer.store[RESOURCE_ENERGY] < upgradeContainer.storeCapacity) {
-                if(creep.transfer(upgradeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(upgradeContainer, {visualizePathStyle: {stroke: '#ffffff'}});
-                }
-            } else if (extensions.length > 0) {
+            } 
+            // else if (upgradeContainer.store[RESOURCE_ENERGY] < upgradeContainer.storeCapacity) {
+            //     if(creep.transfer(upgradeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(upgradeContainer, {visualizePathStyle: {stroke: '#ffffff'}});
+            //     }
+            // } 
+            else if (extensions.length > 0) {
                 if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else {
+            } 
+            else {
                 if(creep.transfer(storageContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(storageContainers[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }

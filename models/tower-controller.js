@@ -2,7 +2,11 @@ var towerController = {
        
     /** @param {Creep} creep **/
     run: function(tower) {
-        const attackTargets = tower.room.find(FIND_HOSTILE_CREEPS)
+        const attackTargets = tower.room.find(FIND_HOSTILE_CREEPS, {
+            filter: (hostile) => {
+                return(hostile.owner.username != 'Zehx')
+            }
+        })
         const repairTargets = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_ROAD || structure.structureType == STRUCTURE_CONTAINER) &&

@@ -2,14 +2,14 @@ var rolePioneerConverter = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if (creep.room.name == 'W25N21') {
-            creep.moveTo(new RoomPosition(1,31, 'W24N21'))
+        if (creep.room.name != 'W26N22') {
+            creep.moveTo(new RoomPosition(47,25, 'W26N22'))
         } else {
             if(creep.room.controller) {
                 if(creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller);
                 }
-                    if(creep.signController(creep.room.controller, "I think Winter has come and gone...") == ERR_NOT_IN_RANGE) {
+                    if(creep.signController(creep.room.controller, "Yep, not very cold anymore; Cersei, life is about to get very difficult for you") == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
     }
             }
