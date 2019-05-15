@@ -2,22 +2,39 @@ const nonAttackPartBuilder = (availEnergyCapacity) => {
     let workPartEnergy = Math.floor(availEnergyCapacity/150)
     const partList = [];
     let partCost = 0
-    if(partCost == 0){
-        for (let i = 0; i < workPartEnergy -1; i++) {
+    if(availEnergyCapacity == 550) {
+        for(let i = 0; i < 3; i ++) {
             partList.push(WORK)
             partCost += 100
             partList.push(MOVE)
             partCost += 50
         }
-    }
-        while(partCost < availEnergyCapacity-100) {
-            partList.push(MOVE)
-            partCost += 50
+        for(let i = 0; i < 2; i ++) {
             partList.push(CARRY)
             partCost += 50
         }
-    partList.push(CARRY)
-    partCost += 50
+        
+    } else {
+        if(partCost == 0 ){
+            for (let i = 0; i < workPartEnergy -1; i++) {
+                if (partList.length < 10) {
+                    partList.push(WORK)
+                    partCost += 100
+                    partList.push(MOVE)
+                    partCost += 50
+                }
+            }
+        }
+            while(partCost < availEnergyCapacity-100) {
+                partList.push(MOVE)
+                partCost += 50
+                partList.push(CARRY)
+                partCost += 50
+            }
+        partList.push(CARRY)
+        partCost += 50
+        
+    }
 
     return {
         partList, 
@@ -49,13 +66,13 @@ const creepRoleCounter = (creepRole, creepRoles, spawnCount, availEnergy, availE
     return creepRoles
 }
 
-const creepNonAttackSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc) => {
+const creepNonAttackSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
         const availEnergy = Game.rooms[gameRoom].energyAvailable;
         const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
-        const parts = nonAttackPartBuilder(availEnergyCapacity);
+        const parts = nonAttackPartBuilder(altEnergy);
         const partListLength = parts.partList.length
         const partCost = parts.partCost
-        
+
         if (creepRoles.length < spawnCount && availEnergy === availEnergyCapacity) {
             var newName = creepRole + Game.time;
             const testSpawn = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,

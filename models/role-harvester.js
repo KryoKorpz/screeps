@@ -74,7 +74,7 @@ var roleHarvester = {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_STORAGE ) || 
                     (structure.id == '5cc2bc58734ecc60941c0d56') &&
-                    structure.store[RESOURCE_ENERGY] != structure.storeCapacity
+                    structure.store[RESOURCE_ENERGY] <= structure.storeCapacity/2
                 }
             })
             var extensions = creep.room.find(FIND_STRUCTURES, {

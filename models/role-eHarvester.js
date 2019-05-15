@@ -57,10 +57,13 @@ var roleEHarvester = {
                     creep.moveTo(mainLabs[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
     }
-    else {
+    else if (mainTerminal.length > 0) {
         if(creep.transfer(mainTerminal[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.moveTo(mainTerminal[0], {visualizePathStyle: {stroke: '#ffffff'}});
         }
+    }
+    else {
+        creep.moveTo(mainStorage[0])
     }
     }
 };

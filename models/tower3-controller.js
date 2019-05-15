@@ -1,4 +1,4 @@
-var tower2Controller = {
+var tower3Controller = {
        
     /** @param {Creep} creep **/
     run: function(tower) {
@@ -38,7 +38,7 @@ var tower2Controller = {
         const repairWalls = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_WALL) &&
-                    structure.hits <= 10000
+                    structure.hits <= 0
             }
         })
         if(tower.energy > 0) {
@@ -66,4 +66,4 @@ var tower2Controller = {
     }
 };
 
-module.exports = tower2Controller;
+module.exports = tower3Controller;

@@ -40,30 +40,75 @@
 // Game.spawns['Spawn1'].spawnCreep([CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, ], 'eHarvester1',
 //     {memory: {role: 'eHarvester'}})
 
+// const nonAttackPartBuilder = (availEnergyCapacity) => {
+//     const workPartEnergy = Math.floor(availEnergyCapacity/2);
+//     const partList = [];
+//     let partCost = 0
+//     for (let i = 0; i < workPartEnergy/100; i++) {
+//     partList.push('WORK');
+//     partCost += 100;
+//     }
+//     let workPartListCount = partList.length
+    
+//     while(workPartListCount >= 0) {
+//             partList.push('MOVE');
+//             partCost += 50;
+//             workPartListCount -= 1;
+//     }
+//     while(partCost < availEnergyCapacity) {
+//             partList.push('CARRY');
+//             partCost += 50;
+//     }
+    
+//     return {
+//         partList, 
+//         partCost
+//     }
+// }
+
 const nonAttackPartBuilder = (availEnergyCapacity) => {
-    const workPartEnergy = Math.floor(availEnergyCapacity/2);
+    let workPartEnergy = Math.floor(availEnergyCapacity/150)
     const partList = [];
     let partCost = 0
-    for (let i = 0; i < workPartEnergy/100; i++) {
-    partList.push('WORK');
-    partCost += 100;
+    if(availEnergyCapacity == 550) {
+        for(let i = 0; i < 3; i ++) {
+            partList.push('WORK')
+            partCost += 100
+            partList.push('MOVE')
+            partCost += 50
+        }
+        for(let i = 0; i < 2; i ++) {
+            partList.push('CARRY')
+            partCost += 50
+        }
+        
+    } else {
+        if(partCost == 0 ){
+            for (let i = 0; i < workPartEnergy -1; i++) {
+                if (partList.length < 10) {
+                    partList.push('WORK')
+                    partCost += 100
+                    partList.push('MOVE')
+                    partCost += 50
+                }
+            }
+        }
+            while(partCost < availEnergyCapacity-100 ) {
+                partList.push('MOVE')
+                partCost += 50
+                partList.push('CARRY')
+                partCost += 50
+            }
+        partList.push('CARRY')
+        partCost += 50
+        
     }
-    let workPartListCount = partList.length
-    
-    while(workPartListCount >= 0) {
-            partList.push('MOVE');
-            partCost += 50;
-            workPartListCount -= 1;
-    }
-    while(partCost < availEnergyCapacity) {
-            partList.push('CARRY');
-            partCost += 50;
-    }
-    
+    console.log(partList.length)
+
     return {
         partList, 
         partCost
     }
 }
 
-console.log(nonAttackPartBuilder(1000))
+console.log(nonAttackPartBuilder(1500))

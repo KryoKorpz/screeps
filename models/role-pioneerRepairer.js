@@ -4,14 +4,14 @@ var rolePioneerRepairer = {
     run: function(creep) {
         const repairRamparts = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_RAMPART) &&
-                    structure.hits <= 25000
+                return (structure.structureType == STRUCTURE_RAMPART ) &&
+                    structure.hits <= 100000
             }
         })
         const repairWalls = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_WALL) &&
-                    structure.hits <= 25000
+                    structure.hits <= 100000
             }
         })
 
@@ -33,7 +33,6 @@ var rolePioneerRepairer = {
                     object.structureType != STRUCTURE_WALL &&
                     object.structureType != STRUCTURE_RAMPART
                 });
-                targets.sort((a,b) => a.hits - b.hits);
                 if(targets.length > 0) {
                     if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffff00'}});
