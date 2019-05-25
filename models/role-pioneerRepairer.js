@@ -5,17 +5,18 @@ var rolePioneerRepairer = {
         const repairRamparts = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_RAMPART ) &&
-                    structure.hits <= 100000
+                    structure.hits <= 600000
             }
         })
         const repairWalls = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_WALL) &&
-                    structure.hits <= 100000
+                    structure.hits <= 600000
             }
         })
 
         if(creep.memory.role == 'pioneerRepairer') {
+            creep.memory.repairing = true;
 
             if(creep.memory.repairing && creep.carry.energy == 0) {
                 creep.memory.repairing = false;

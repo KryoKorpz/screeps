@@ -2,11 +2,10 @@ var rolePioneer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if(creep.room.name != 'W26N22') {
-            creep.moveTo(new RoomPosition(47,25, 'W26N22'))
+        if(creep.room.name != 'W26N23') {
+            creep.moveTo(new RoomPosition(29,46, 'W26N23'))
         }
-        else
-        {
+        else {
             creep.memory.role = 'pioneerWorker'
         }
     }

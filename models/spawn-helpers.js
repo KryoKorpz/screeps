@@ -1,4 +1,5 @@
-// Game.spawns['Spawn2'].spawnCreep([MOVE, MOVE, MOVE, CARRY, CARRY, CARRY], 'EggTender4', {memory: {role: 'pioneerEggTender'}})
+// Game.spawns['Spawn3'].spawnCreep([MOVE, MOVE, CARRY, CARRY, CARRY], 'EggTender4', {memory: {role: 'pioneerEggTender'}})
+// Game.spawns['Spawn3'].spawnCreep([MOVE, CLAIM], 'pioneerConverter1', {memory: {role: 'pioneerConverter'}})
 
 const nonAttackPartBuilder = (availEnergyCapacity) => {
     let workPartEnergy = Math.floor(availEnergyCapacity/150)
@@ -112,6 +113,25 @@ const creepPioneerSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc
                 }
             }
 }
+const creepPioneerEggTenderSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
+        const availEnergy = Game.rooms[gameRoom].energyAvailable;
+        const availEnergyCapacity = Game.rooms[gameRoom].energyCapacityAvailable;
+
+        if (creepRoles.length < spawnCount && availEnergy >= altEnergy) {
+            var newName = creepRole + Game.time;
+            const testSpawn = Game.spawns[spawnLoc].spawnCreep([MOVE, MOVE, CARRY, CARRY, CARRY], newName,
+                    {dryRun: true })
+            if(testSpawn == OK) {
+                console.log(creepRole + "s: " + creepRoles.length)
+                // console.log('Spawning new ' + creepRole + " " + newName + " Total Parts: " + partListLength + " Part Cost: " + partCost + "/" + availEnergy);
+                const result = Game.spawns[spawnLoc].spawnCreep([MOVE, MOVE, CARRY, CARRY, CARRY], newName,
+                        {memory: {role: creepRole}})
+                    if (result != OK) {
+                        console.log("error code: " + result);
+                    }
+                }
+            }
+}
 
 const creepHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
         const parts = harvestPartBuilder(altEnergy);
@@ -124,6 +144,25 @@ const creepHarvesterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnL
                 console.log(creepRole + "s: " + creepRoles.length)
                 console.log('Spawning new ' + creepRole + " " + newName);
                 const result = Game.spawns[spawnLoc].spawnCreep(parts.partList, newName,
+                        {memory: {role: creepRole}})
+                    if (result != OK) {
+                        console.log("error code: " + result);
+                    }
+                }
+            }
+}
+
+const creepPioneerConverterSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc, altEnergy) => {
+        
+        if (creepRoles.length < spawnCount && altEnergy <= Game.rooms[gameRoom].energyAvailable) {
+            var newName = creepRole + Game.time;
+            const testSpawn = Game.spawns[spawnLoc].spawnCreep([ CLAIM, MOVE ], newName,
+                { dryRun: true })
+            
+            if(testSpawn == OK) {
+                console.log(creepRole + "s: " + creepRoles.length)
+                console.log('Spawning new ' + creepRole + " " + newName);
+                const result = Game.spawns[spawnLoc].spawnCreep([ CLAIM, MOVE ], newName,
                         {memory: {role: creepRole}})
                     if (result != OK) {
                         console.log("error code: " + result);
@@ -294,5 +333,7 @@ module.exports = {
     creepPioneerSpawn,
     creepTowerDrainerSpawn,
     creepPhalanxSpawn,
+    creepPioneerConverterSpawn,
+    creepPioneerEggTenderSpawn,
     
 };

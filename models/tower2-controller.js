@@ -32,13 +32,19 @@ var tower2Controller = {
         const repairRamparts = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_RAMPART) &&
-                    (structure.hits >= 100000 && structure.hits <=102000)
+                    (structure.hits >= 600000 && structure.hits <= 602000)
+            }
+        })
+        const repairNewRamparts = tower.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_RAMPART) &&
+                    (structure.hits <= 50000 )
             }
         })
         const repairWalls = tower.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_WALL) &&
-                    structure.hits <= 10000
+                    structure.hits <= 5000
             }
         })
         if(tower.energy > 0) {
@@ -56,6 +62,9 @@ var tower2Controller = {
             }
         }
         if(tower.energy > 500) {
+            if(repairNewRamparts.length > 0) {
+                tower.repair(repairNewRamparts[0])
+            }
             if(repairRamparts.length > 0) {
                 tower.repair(repairRamparts[0])
             }

@@ -89,18 +89,13 @@ var rolePioneerTransport = {
                         creep.moveTo(towers[0], {visualizePathStyle: {stroke: '#00ffAA'}});
                     }
                 }
-                else if (link.energy < link.energyCapacity-25) {
-                    if(creep.transfer(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(link, {visualizePathStyle: {stroke: '#00ffAA'}});
-                    }
-                }
                 // else if (upgradeContainer.store[RESOURCE_ENERGY] < upgradeContainer.storeCapacity-400) {
                 //     if(creep.transfer(upgradeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 //         creep.moveTo(upgradeContainer, {visualizePathStyle: {stroke: '#AAFF'}});
                 //     }
                 // }
                 else {
-                    if(mainStorage.store[RESOURCE_ENERGY] < mainStorage.storeCapacity/2) {
+                    if(mainStorage.store[RESOURCE_ENERGY] < mainStorage.storeCapacity/4) {
                         if(creep.transfer(mainStorage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                             creep.moveTo(mainStorage, {visualizePathStyle: {stroke: '#a00FFa'}});
                         }            
