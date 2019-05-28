@@ -6,6 +6,12 @@ var rolePioneerTransport2 = {
                 (structure.id == '5cd8e3d94586281e0e62940b' || structure.id == '5ce88ef0e0ecee147c3edaec')
             }
         })
+        const transferLinks = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_LINK) &&
+                (structure.id == '5ceb0c29968e0233f99c097d' || structure.id == '5ccc7baaefbe39607d4499d5' || structure.id == '5cda90cfe414c27d6936853e')
+            }
+        })
         const locatedTombstones = creep.room.find(FIND_TOMBSTONES);
         const looseEnergy = creep.room.find(FIND_DROPPED_RESOURCES);
         const sourceTombs = [];
@@ -21,8 +27,8 @@ var rolePioneerTransport2 = {
         const sourceContainer = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&
-                (structure.store[RESOURCE_ENERGY] >= 600) &&
-                (structure.id !== '5cd6a892e414c27d69354bf1' || structure.id !== '5cc9fc2c5bdcc824ce25115b' || structure.id !== '5ce89299a2bc0c1482e76390')
+                (structure.store[RESOURCE_ENERGY] >= creep.carryCapacity - creep.carry.energy) &&
+                (structure.id !== '5cd6a892e414c27d69354bf1' && structure.id !== '5cc9fc2c5bdcc824ce25115b' && structure.id !== '5ce8c173f6835b34054a9de2')
             }
         })
         const nodes = creep.room.find(FIND_STRUCTURES, {
@@ -47,7 +53,7 @@ var rolePioneerTransport2 = {
             };
         if(looseEnergy.length > 0) {
             for(let i = 0; i < looseEnergy.length; i++) {
-                if(looseEnergy[i].energy > 200){
+                if(looseEnergy[i].energy >= creep.carryCapacity - creep.carry.energy){
                     looseEnergyToPickUp.push(looseEnergy[i])
                     }
                 }
@@ -63,12 +69,7 @@ var rolePioneerTransport2 = {
         };
         
         if(!creep.memory.transporting) {
-    	    if(sourceContainer.length > 0) {
-                if(creep.withdraw(sourceContainer[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sourceContainer[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                 }        
-    	    }
-            else if(looseEnergyToPickUp.length > 0) {
+            if(looseEnergyToPickUp.length > 0) {
                 if(creep.pickup(looseEnergyToPickUp[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(looseEnergyToPickUp[0], {visualizePathStyle: {stroke: '##0000FF'}})
                 }        
@@ -78,6 +79,16 @@ var rolePioneerTransport2 = {
                     creep.moveTo(sourceTombs[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                  }  
             } 
+    	    else if(transferLinks.length > 0 && transferLinks[0].energy > 0) {
+                if(creep.withdraw(transferLinks[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(transferLinks[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                 }        
+    	    }
+    	    else if(sourceContainer.length > 0) {
+                if(creep.withdraw(sourceContainer[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sourceContainer[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                 }        
+    	    }
         }
         else {
             if(nodes.length > 0) {
@@ -91,28 +102,13 @@ var rolePioneerTransport2 = {
                     creep.moveTo(towers[0], {visualizePathStyle: {stroke: '#00ffAA'}});
                 }
             }
-                // else if (link.energy < link.energyCapacity-25) {
-                //     if(creep.transfer(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                //         creep.moveTo(link, {visualizePathStyle: {stroke: '#00ffAA'}});
-                //     }
-                // }
-                // else if (upgradeContainer.store[RESOURCE_ENERGY] < upgradeContainer.storeCapacity-400) {
-                //     if(creep.transfer(upgradeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                //         creep.moveTo(upgradeContainer, {visualizePathStyle: {stroke: '#AAFF'}});
-                //     }
-                // }
-            else if(mainStorage.length > 0 && mainStorage[0].store[RESOURCE_ENERGY] < mainStorage[0].storeCapacity/2) {
+            else if(mainStorage.length > 0 ) {
                 if(creep.transfer(mainStorage[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(mainStorage[0], {visualizePathStyle: {stroke: '#a00FFa'}});
                     }            
                 } 
-                    // else {
-                    //     if(creep.transfer(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    //         creep.moveTo(link, {visualizePathStyle: {stroke: '#00ffAA'}});
-                    //     }
-                    // }
-                }
             }
+        }
     }
 
 module.exports = rolePioneerTransport2
