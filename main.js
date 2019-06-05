@@ -26,8 +26,8 @@ var rolePioneerDefender = require('role-pioneerDefender');
 var rolePioneerRepairer = require('role-pioneerRepairer');
 var rolePioneerUpgrader = require('role-pioneerUpgrader');
 var rolePioneerTurretUpgrader = require('role-pioneerTurretUpgrader');
-var rolePioneerTurretUpgrader2 = require('role-pioneerTurretUpgrader2');
 var rolePioneerTurretUpgrader3 = require('role-pioneerTurretUpgrader3');
+var rolePioneerTurretUpgrader4 = require('role-pioneerTurretUpgrader4');
 var rolePioneerTransport = require('role-pioneerTransport');
 var rolePioneerTransport2 = require('role-pioneerTransport2');
 var rolePioneerUpgradeRunner = require('role-pioneerUpgradeRunner');
@@ -78,14 +78,15 @@ module.exports.loop = function () {
     const turretUpgraderMax = 2
     const creepKillerMax = 2
     const upgradeRunnerMax = 1
-    const pioneerTurretUpgrader2Max = 2
+    const pioneerUpgradeRunner3Max = 2
     const pioneerTurretUpgrader3Max = 2
+    const pioneerTurretUpgrader4Max = 2
     
     // min levels
     const eHarvesterMin = 1
     const mineralMinerMin = 0
     const towerRunnerMin = 0
-    const creepKillerMin = 2
+    const creepKillerMin = 1
     const towerDrainerMin = 0
     const turretUpgraderMin = 1
     const minerMin = 1
@@ -102,14 +103,15 @@ module.exports.loop = function () {
     const pioneer4Min = 0
     const pioneerDefenderMin = 0
     const pioneerTurretUpgraderMin = 1
-    const pioneerTurretUpgrader2Min = 1
     const pioneerTurretUpgrader3Min = 1
+    const pioneerTurretUpgrader4Min = 1
     const pioneerTransportMin = 1
     const pioneerTransport2Min = 1
-    const pioneerTransport3Min = 1
+    const pioneerTransport4Min = 1
     const pioneerUpgradeRunnerMin = 1
+    const pioneerUpgradeRunner3Min = 1
     const pioneerEggTenderMin = 1
-    const phalanxCreepMin = 0
+    const phalanxCreepMin = 5
     const pioneerConverterMin = 0
     const pioneerMinerMin = 1
     const pioneerMiner3Min = 1
@@ -121,7 +123,7 @@ module.exports.loop = function () {
     const eHarvesters = spawnHelpers.creepRoleCounter('eHarvester', 'eHarvesters', eHarvesterMin, availEnergy, 400);
     const mineralMiners = spawnHelpers.creepRoleCounter('mineralMiner', 'mineralMiners', mineralMinerMin, availEnergy, availEnergyCapacity);
     const upgradeRunners = spawnHelpers.creepRoleCounter('upgradeRunner', 'upgradeRunners', upgradeRunnerMin, availEnergy, 1150);
-    const turretUpgraders = spawnHelpers.creepRoleCounter('turretUpgrader', 'turretUpgraders', turretUpgraderMin, availEnergy, 600);
+    const turretUpgraders = spawnHelpers.creepRoleCounter('turretUpgrader', 'turretUpgraders', turretUpgraderMax, availEnergy, 1100);
     const miners = spawnHelpers.creepRoleCounter('miner', 'miners', minerMin, availEnergy, 700);
     const miners2 = spawnHelpers.creepRoleCounter('miner2', 'miners2', miner2Min, availEnergy, 700);
     const miners3 = spawnHelpers.creepRoleCounter('miner3', 'miners3', miner3Min, availEnergy, 600);
@@ -140,11 +142,10 @@ module.exports.loop = function () {
     const pioneerRepairers = spawnHelpers.creepRoleCounter('pioneerRepairer', 'pioneerRepairers', 0, availEnergy, availEnergyCapacity)
     const pioneerUpgraders = spawnHelpers.creepRoleCounter('pioneerUpgrader', 'pioneerUpgraders', 0, availEnergy, availEnergyCapacity)
     const pioneerTurretUpgraders = spawnHelpers.creepRoleCounter('pioneerTurretUpgrader', 'pioneerTurretUpgraders', pioneerTurretUpgraderMin, availEnergy, availEnergyCapacity)
-    const pioneerTurretUpgraders2 = spawnHelpers.creepRoleCounter('pioneerTurretUpgrader2', 'pioneerTurretUpgraders2', pioneerTurretUpgrader2Min, availEnergy, availEnergyCapacity)
     const pioneerTurretUpgraders3 = spawnHelpers.creepRoleCounter('pioneerTurretUpgrader3', 'pioneerTurretUpgraders3', pioneerTurretUpgrader3Min, availEnergy, availEnergyCapacity)
+    const pioneerTurretUpgraders4 = spawnHelpers.creepRoleCounter('pioneerTurretUpgrader4', 'pioneerTurretUpgraders4', pioneerTurretUpgrader4Min, availEnergy, availEnergyCapacity)
     const pioneerTransports = spawnHelpers.creepRoleCounter('pioneerTransport', 'pioneerTransports', pioneerTransportMin, availEnergy, 1150)
     const pioneerTransports2 = spawnHelpers.creepRoleCounter('pioneerTransport2', 'pioneerTransports2', pioneerTransport2Min, availEnergy, 1150)
-    const pioneerUpgradeRunners = spawnHelpers.creepRoleCounter('pioneerUpgradeRunner', 'pioneerUpgradeRunners', pioneerUpgradeRunnerMin, availEnergy, 850)
     const phalanxCreeps = spawnHelpers.creepRoleCounter('phalanxCreep', 'phalanxCreeps', phalanxCreepMin, availEnergy, 650)
     const pioneerConverters = spawnHelpers.creepRoleCounter('pioneerConverter', 'pioneerConverters', pioneerConverterMin, availEnergy, 650)
     const pioneerMiners = spawnHelpers.creepRoleCounter('pioneerMiner', 'pioneerMiners', pioneerMinerMin, availEnergy, 1500)
@@ -152,12 +153,20 @@ module.exports.loop = function () {
     const pioneerMiners4 = spawnHelpers.creepRoleCounter('pioneerMiner4', 'pioneerMiners4', pioneerMiner4Min, availEnergy, 1500)
 
     const pioneerCountTracker = pioneerWorkers.length + pioneerBuilders.length + pioneerTowers.length + pioneerRepairers.length + pioneerUpgraders.length
-    // Creep Spawners
 
+    // Creep Spawners\
+    
+    for (name in Game.spawns) {
+        
+        if (phalanxCreeps.length < phalanxCreepMin) {
+         spawnHelpers.creepPhalanxSpawn('phalanxCreep', phalanxCreeps, phalanxCreepMin, 'W25N21', name, 50)
+            
+        }   
+    }
     // Spawns creeps to meet min operating levels
     const sites1 = Game.rooms['W25N21'].find(FIND_CONSTRUCTION_SITES)
     const sites2 = Game.rooms['W24N21'].find(FIND_CONSTRUCTION_SITES)
-    const sites3 = Game.rooms['W26N22'].find(FIND_CONSTRUCTION_SITES)
+    // const sites3 = Game.rooms['W26N22'].find(FIND_CONSTRUCTION_SITES)
     const sites4 = Game.rooms['W26N23'].find(FIND_CONSTRUCTION_SITES)
     
     const hostiles = Game.rooms['W25N21'].find(FIND_HOSTILE_CREEPS)
@@ -223,7 +232,7 @@ module.exports.loop = function () {
     const room2UpgradeContainer = Game.getObjectById('5cc9fc2c5bdcc824ce25115b')
     const mineral = Game.rooms['W25N21'].find(FIND_MINERALS)
     const room1Storage = Game.getObjectById('5cc2b2eec7b3a60e58b6642d')
-    const room3Storage = Game.getObjectById('5cd8e3d94586281e0e62940b')
+    // const room3Storage = Game.getObjectById('5cd8e3d94586281e0e62940b')
     const room4Storage = Game.getObjectById('5ce88ef0e0ecee147c3edaec')
     
 
@@ -270,6 +279,11 @@ module.exports.loop = function () {
         }
     })
     
+    const pioneerEggTenders = Game.rooms['W25N21'].find(FIND_MY_CREEPS, {
+        filter: (worker) => {
+            return (worker.memory.role == "pioneerEggTender")
+        }
+    })
     const pioneerEggTenders2 = Game.rooms['W24N21'].find(FIND_MY_CREEPS, {
         filter: (worker) => {
             return (worker.memory.role == "pioneerEggTender")
@@ -304,6 +318,12 @@ module.exports.loop = function () {
         }
     })
     
+    const pioneerUpgradeRunners = Game.rooms['W25N21'].find(FIND_MY_CREEPS, {
+        filter: (worker) => {
+            return (worker.memory.role == 'pioneerUpgradeRunner')
+        }
+    })
+    
     const pioneerUpgradeRunners3 = Game.rooms['W26N22'].find(FIND_MY_CREEPS, {
         filter: (worker) => {
             return (worker.memory.role == 'pioneerUpgradeRunner')
@@ -315,14 +335,24 @@ module.exports.loop = function () {
             return (worker.memory.role == 'pioneerUpgradeRunner')
         }
     })
+    const looseEnergy = Game.rooms['W25N21'].find(FIND_DROPPED_RESOURCES)
+    const looseEnergy2 = Game.rooms['W24N21'].find(FIND_DROPPED_RESOURCES)
+    const looseEnergy3 = Game.rooms['W26N22'].find(FIND_DROPPED_RESOURCES)
+    const looseEnergy4 = Game.rooms['W26N23'].find(FIND_DROPPED_RESOURCES)
     
+
     // Room 4 Spawn
     
-    // if(pioneerEggTenders4.length < pioneerEggTenderMin && availEnergy3 < 400) {
-    //     spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders4, pioneerEggTenderMin, 'W26N23', 'Spawn4', 250)
-    // }
-    // else 
-    if(miners6.length < miner6Min) {
+    if(pioneerEggTenders4.length < pioneerEggTenderMin && availEnergy3 < 400 ) {
+        spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders4, pioneerEggTenderMin, 'W26N23', 'Spawn4', 250)
+    }
+    else if(pioneerEggTenders4.length < pioneerEggTenderMin && looseEnergy4.length > 0) {
+        spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders4, pioneerEggTenderMin, 'W26N23', 'Spawn4', 250)
+    }
+    else if(creepKillers.length < creepKillerMin && hostiles4.length > 0 ) {
+        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W26N23', 'Spawn4', 950)
+    }
+    else if(miners6.length < miner6Min) {
         spawnHelpers.creepMinerSpawn('miner6', miners6, miner6Min, 'W26N23', 'Spawn4', 600)
     }    
     else if(miners7.length < miner7Min) {
@@ -331,8 +361,8 @@ module.exports.loop = function () {
     else if (pioneerCountTracker < pioneerMin && sites3.length > 0) {
         spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneerMin, 'W26N22', 'Spawn3', 1500)
     }
-    else if (pioneerTransports4.length < pioneerTransport3Min) {
-        spawnHelpers.creepHarvesterSpawn('pioneerTransport2', pioneerTransports4, pioneerTransport3Min, 'W26N23', 'Spawn4', 1150)
+    else if (pioneerTransports4.length < pioneerTransport4Min) {
+        spawnHelpers.creepHarvesterSpawn('pioneerTransport2', pioneerTransports4, pioneerTransport4Min, 'W26N23', 'Spawn4', 1150)
     }
     else if (pioneers4.length < pioneer4Min) {
         spawnHelpers.creepPioneerSpawn('pioneer', pioneers, pioneer4Min, 'W26N23', 'Spawn4', 1500)
@@ -343,26 +373,32 @@ module.exports.loop = function () {
     else if (pioneerUpgradeRunners4.length < pioneerUpgradeRunnerMin) {
         spawnHelpers.creepHarvesterSpawn('pioneerUpgradeRunner', pioneerUpgradeRunners4, pioneerUpgradeRunnerMin, 'W26N23', 'Spawn4', 450)
     }
-    else if (pioneerTurretUpgraders3.length < pioneerTurretUpgrader3Min) {
-        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader3', pioneerTurretUpgraders3, pioneerTurretUpgrader3Min, 'W26N23', 'Spawn4', 1100)
+    else if (pioneerTurretUpgraders4.length < pioneerTurretUpgrader4Min) {
+        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader4', pioneerTurretUpgraders4, pioneerTurretUpgrader4Min, 'W26N23', 'Spawn4', 1100)
     }
-    else if (pioneerTurretUpgraders3.length < pioneerTurretUpgrader3Max && room4Storage.store[RESOURCE_ENERGY] > room4Storage.storeCapacity/4) {
-        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader3', pioneerTurretUpgraders3, pioneerTurretUpgrader3Max, 'W26N23', 'Spawn4', 1100)
+    else if (pioneerTurretUpgraders4.length < pioneerTurretUpgrader4Max && room4Storage.store[RESOURCE_ENERGY] > room4Storage.storeCapacity/4) {
+        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader4', pioneerTurretUpgraders4, pioneerTurretUpgrader4Max, 'W26N23', 'Spawn4', 1100)
     }
-    // else if (phalanxCreeps.length < phalanxCreepMin) {
-    //     spawnHelpers.creepPhalanxSpawn('phalanxCreep', phalanxCreeps, phalanxCreepMin, 'W26N23', 'Spawn4', 650)
-    // }
-    // else if (pioneerConverters.length < pioneerConverterMin) {
-    //     spawnHelpers.creepPioneerConverterSpawn('pioneerConverter', pioneerConverters, pioneerConverterMin, 'W26N23', 'Spawn4', 650)
-    // }
-    // else if(pioneerDefenders.length < pioneerDefenderMin ) {
-    //     spawnHelpers.creepKillerSpawn('pioneerDefender', pioneerDefenders, pioneerDefenderMin, 'W26N23', 'Spawn4', 650)
-    // }
+    else if (phalanxCreeps.length < phalanxCreepMin) {
+        spawnHelpers.creepPhalanxSpawn('phalanxCreep', phalanxCreeps, phalanxCreepMin, 'W26N23', 'Spawn4', 650)
+    }
+    else if (pioneerConverters.length < pioneerConverterMin) {
+        spawnHelpers.creepPioneerConverterSpawn('pioneerConverter', pioneerConverters, pioneerConverterMin, 'W26N23', 'Spawn4', 650)
+    }
+    else if(pioneerDefenders.length < pioneerDefenderMin ) {
+        spawnHelpers.creepKillerSpawn('pioneerDefender', pioneerDefenders, pioneerDefenderMin, 'W26N23', 'Spawn4', 650)
+    }
     
     // Room 3 Spawn
-    
-    if(pioneerEggTenders3.length < pioneerEggTenderMin && availEnergy3 < 400) {
+
+    if (pioneerEggTenders3.length < pioneerEggTenderMin && availEnergy3 < 400) {
         spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders3, pioneerEggTenderMin, 'W26N22', 'Spawn3', 250)
+    }
+    else if(pioneerEggTenders3.length < pioneerEggTenderMin && looseEnergy3.length > 0) {
+        spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders3, pioneerEggTenderMin, 'W26N22', 'Spawn3', 250)
+    }
+    else if(creepKillers.length < creepKillerMin && hostiles3.length > 0 ) {
+        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W26N22', 'Spawn3', 950)
     }
     else if(miners4.length < miner4Min) {
         spawnHelpers.creepMinerSpawn('miner4', miners4, miner4Min, 'W26N22', 'Spawn3', 600)
@@ -370,29 +406,30 @@ module.exports.loop = function () {
     else if(miners5.length < miner5Min) {
         spawnHelpers.creepLinkMinerSpawn('miner5', miners5, miner5Min, 'W26N22', 'Spawn3', 700)
     }    
-    // else if (pioneerCountTracker < pioneerMin && sites3.length > 0) {
-    //     spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneerMin, 'W26N22', 'Spawn3', 1500)
-    // }
+
     else if (pioneerTransports3.length < pioneerTransport2Min) {
         spawnHelpers.creepHarvesterSpawn('pioneerTransport2', pioneerTransports3, pioneerTransport2Min, 'W26N22', 'Spawn3', 1150)
+    }
+    if (pioneerUpgradeRunners3.length < pioneerUpgradeRunner3Min) {
+        spawnHelpers.creepHarvesterSpawn('pioneerUpgradeRunner', pioneerUpgradeRunners3, pioneerUpgradeRunner3Min, 'W26N22', 'Spawn3', 850)
+    }
+    else if (pioneerTurretUpgraders3.length < pioneerTurretUpgrader3Min) {
+        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader3', pioneerTurretUpgraders3, pioneerTurretUpgrader3Min, 'W26N22', 'Spawn3-2', 1100)
     }
     else if (pioneerMiners3.length < pioneerMiner3Min) {
         spawnHelpers.creepPioneerMinerSpawn('pioneerMiner3', pioneerMiners3, pioneerMiner3Min, 'W26N22', 'Spawn3', 1500)
     }
-    else if (pioneers3.length < pioneerMin) {
-        spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneerMin, 'W26N22', 'Spawn3', 1500)
+    else if (pioneers3.length < pioneer3Min) {
+        spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneer3Min, 'W26N22', 'Spawn3', 1500)
     }
-    else if (pioneers4.length + pioneers < pioneer2Min) {
-        spawnHelpers.creepPioneerSpawn('pioneer', pioneers, pioneer2Min, 'W26N22', 'Spawn3', 1500)
+    // else if (pioneers4.length + pioneers < pioneer3Min) {
+    //     spawnHelpers.creepPioneerSpawn('pioneer', pioneers, pioneer3Min, 'W26N22', 'Spawn3', 1500)
+    // }
+    else if (pioneerTurretUpgraders3.length < pioneerTurretUpgrader3Max && room3Storage.store[RESOURCE_ENERGY] > room3Storage.storeCapacity/4) {
+        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader3', pioneerTurretUpgraders3, pioneerTurretUpgrader3Max, 'W26N22', 'Spawn3', 1100)
     }
-    else if (pioneerUpgradeRunners3.length < pioneerUpgradeRunnerMin) {
-        spawnHelpers.creepHarvesterSpawn('pioneerUpgradeRunner', pioneerUpgradeRunners3, pioneerUpgradeRunnerMin, 'W26N22', 'Spawn3', 450)
-    }
-    else if (pioneerTurretUpgraders2.length < pioneerTurretUpgrader2Min) {
-        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader2', pioneerTurretUpgraders2, pioneerTurretUpgrader2Min, 'W26N22', 'Spawn3', 1100)
-    }
-    else if (pioneerTurretUpgraders2.length < pioneerTurretUpgrader2Max && room3Storage.store[RESOURCE_ENERGY] > room3Storage.storeCapacity/4) {
-        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader2', pioneerTurretUpgraders2, pioneerTurretUpgrader2Max, 'W26N22', 'Spawn3', 1100)
+    else if (pioneerUpgradeRunners3.length < pioneerUpgradeRunner3Max && room3Storage.store[RESOURCE_ENERGY] > room3Storage.storeCapacity/4) {
+        spawnHelpers.creepHarvesterSpawn('pioneerUpgradeRunner', pioneerUpgradeRunners3, pioneerUpgradeRunner3Max, 'W26N22', 'Spawn3', 850)
     }
     else if (phalanxCreeps.length < phalanxCreepMin) {
         spawnHelpers.creepPhalanxSpawn('phalanxCreep', phalanxCreeps, phalanxCreepMin, 'W26N22', 'Spawn3', 650)
@@ -408,46 +445,38 @@ module.exports.loop = function () {
     if(pioneerEggTenders2.length < pioneerEggTenderMin && availEnergy2 < 400) {
         spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders2, pioneerEggTenderMin, 'W24N21', 'Spawn2', 250)
     }
-
-    else if(miners3.length < miner3Min) {
-        spawnHelpers.creepMinerSpawn('miner3', miners3, miner3Max, 'W24N21', 'Spawn2', 600)
-
-        // spawnHelpers.creepLinkMinerSpawn('miner3', miners3, miner3Max, 'W24N21', 'Spawn2', 700)
-    }
-    // else if (pioneerCountTracker <= pioneerMin && sites2.length > 0) {
-    //     spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneerMin, 'W24N21', 'Spawn2', 1500)
-    // }
-    else if (pioneerTransports.length < pioneerTransportMin) {
-        spawnHelpers.creepHarvesterSpawn('pioneerTransport', pioneerTransports, pioneerTransportMin, 'W24N21', 'Spawn2', 1150)
-    }
-    else if (pioneers2.length < pioneer3Min) {
-        spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneerMin, 'W24N21', 'Spawn2', 1500)
-    }
-    else if (pioneerTurretUpgraders.length < pioneerTurretUpgraderMin) {
-        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader', pioneerTurretUpgraders, pioneerTurretUpgraderMin, 'W24N21', 'Spawn2', 1100)
-    }
-// Room 1 Spawn
-
-    if(creepKillers.length < creepKillerMin && hostiles.length > 0 ) {
-        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W25N21', 'Spawn1', 950)
+    else if(pioneerEggTenders2.length < pioneerEggTenderMin && looseEnergy2.length > 0) {
+        spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders2, pioneerEggTenderMin, 'W24N21', 'Spawn2', 250)
     }
     else if(creepKillers.length < creepKillerMin && hostiles2.length > 0 ) {
         spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W24N21', 'Spawn2', 950)
     }
-    else if(creepKillers.length < creepKillerMin && hostiles3.length > 0 ) {
-        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W26N22', 'Spawn3', 950)
+
+    else if(miners3.length < miner3Min) {
+        spawnHelpers.creepMinerSpawn('miner3', miners3, miner3Max, 'W24N21', 'Spawn2', 600)
+
     }
-    else if(creepKillers.length < creepKillerMin && hostiles4.length > 0 ) {
-        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W26N23', 'Spawn4', 950)
+    else if (pioneerTransports.length < pioneerTransportMin) {
+        spawnHelpers.creepHarvesterSpawn('pioneerTransport', pioneerTransports, pioneerTransportMin, 'W24N21', 'Spawn2', 1150)
     }
-    // else if(pioneerDefenders.length < pioneerDefenderMin ) {
-    //     spawnHelpers.creepKillerSpawn('pioneerDefender', pioneerDefenders, pioneerDefenderMin, 'W25N21', 'Spawn1', 650)
-    // }
-    
-    else if(eHarvesters.length < eHarvesterMin && availEnergy < 500) {
-        spawnHelpers.creepHarvesterSpawn('eHarvester', eHarvesters, eHarvesterMin, 'W25N21', 'Spawn1', 400)
+    else if (pioneers2.length < pioneer2Min) {
+        spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneer2Min, 'W24N21', 'Spawn2', 1500)
     }
-    
+    else if (pioneerTurretUpgraders.length < pioneerTurretUpgraderMin) {
+        spawnHelpers.creepPioneerTurretUpgraderSpawn('pioneerTurretUpgrader', pioneerTurretUpgraders, pioneerTurretUpgraderMin, 'W24N21', 'Spawn2', 1100)
+    }
+Room 1 Spawn
+
+    if(pioneerEggTenders.length < pioneerEggTenderMin && availEnergy3 < 400) {
+        spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders, pioneerEggTenderMin, 'W25N21', 'Spawn1', 250)
+    }
+    if(pioneerEggTenders.length < pioneerEggTenderMin && looseEnergy.length > 0) {
+        spawnHelpers.creepPioneerEggTenderSpawn('pioneerEggTender', pioneerEggTenders, pioneerEggTenderMin, 'W25N21', 'Spawn1', 250)
+    }
+    else if(creepKillers.length < creepKillerMin && hostiles.length > 0 ) {
+        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W25N21', 'Spawn1', 950)
+    }
+
     else if(mineralMiners.length < mineralMinerMin && mineral[0].mineralAmount > 0) {
         spawnHelpers.creepNonAttackSpawn('mineralMiner', mineralMiners, mineralMinerMin, 'W25N21', 'Spawn1', 1150)
     }
@@ -466,8 +495,12 @@ module.exports.loop = function () {
         spawnHelpers.creepPioneerSpawn('pioneerWorker', pioneers, pioneerMin, 'W25N21', 'Spawn1', 1500)
     }
     
-    else if (upgradeRunners.length < upgradeRunnerMin) {
-        spawnHelpers.creepHarvesterSpawn('upgradeRunner', upgradeRunners, upgradeRunnerMin, 'W25N21', 'Spawn1', 1150)
+    // else if (pioneerUpgradeRunners.length < pioneerUpgradeRunnerMin && room1Storage.store[RESOURCE_ENERGY] > room1Storage.storeCapacity/2) {
+    //     spawnHelpers.creepHarvesterSpawn('pioneerUpgradeRunner', pioneerUpgradeRunners, pioneerUpgradeRunnerMin, 'W25N21', 'Spawn1', 850)
+    // }
+    
+    else if (pioneerUpgradeRunners.length < pioneerUpgradeRunnerMin) {
+        spawnHelpers.creepHarvesterSpawn('pioneerUpgradeRunner', pioneerUpgradeRunners, pioneerUpgradeRunnerMin, 'W25N21', 'Spawn1', 850)
     }
     
     else if (turretUpgraders.length < turretUpgraderMin) {
@@ -486,22 +519,13 @@ module.exports.loop = function () {
         spawnHelpers.creepTowerDrainerSpawn('towerDrainer', towerDrainers, towerDrainerMin, 'W25N21', 'Spawn1', 600)
         
     } 
-
-    else {
-        
-        if (creepKillers.length < creepKillerMax && hostiles.length > 0 && hostilesInRange.length > 0) {
-        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W25N21', 'Spawn1', 650)
-        }
-        
-        else if (turretUpgraders.length < turretUpgraderMax && room1Storage.store[RESOURCE_ENERGY] > room1Storage.storeCapacity/2) {
-        spawnHelpers.creepTurretUpgraderSpawn('turretUpgrader', turretUpgraders, turretUpgraderMax, 'W25N21', 'Spawn1', 1100)
-        }
-        
-        else if (upgradeRunners.length < upgradeRunnerMax && room1Storage.store[RESOURCE_ENERGY] > room1Storage.storeCapacity/2) {
-        spawnHelpers.creepHarvesterSpawn('upgradeRunner', upgradeRunners, upgradeRunnerMax, 'W25N21', 'Spawn1', 1150)
-        }
+    else if (creepKillers.length < 2) {
+        spawnHelpers.creepKillerSpawn('creepKiller', creepKillers, creepKillerMax, 'W25N21', 'Spawn1-2', 650)
     }
-    
+        
+    else if (turretUpgraders.length < turretUpgraderMax && room1Storage.store[RESOURCE_ENERGY] > room1Storage.storeCapacity/4) {
+        spawnHelpers.creepTurretUpgraderSpawn('turretUpgrader', turretUpgraders, turretUpgraderMax, 'W25N21', 'Spawn1-2', 1100)
+    }
     // Spawns creeps in surplus of min operating levels
     
     
@@ -511,6 +535,15 @@ module.exports.loop = function () {
             '🛠️' + spawningCreep.memory.role,
             Game.spawns['Spawn1'].pos.x + 1,
             Game.spawns['Spawn1'].pos.y,
+            {align: 'left', opacity: 0.8});
+    }
+    
+    if(Game.spawns['Spawn1-2'].spawning) {
+        var spawningCreep = Game.creeps[Game.spawns['Spawn1-2'].spawning.name];
+        Game.spawns['Spawn1-2'].room.visual.text(
+            '🛠️' + spawningCreep.memory.role,
+            Game.spawns['Spawn1-2'].pos.x + 1,
+            Game.spawns['Spawn1-2'].pos.y,
             {align: 'left', opacity: 0.8});
     }
     if(Game.spawns['Spawn2'].spawning) {
@@ -527,6 +560,14 @@ module.exports.loop = function () {
             '🛠️' + spawningCreep.memory.role,
             Game.spawns['Spawn3'].pos.x + 1,
             Game.spawns['Spawn3'].pos.y,
+            {align: 'left', opacity: 0.8});
+    }
+    if(Game.spawns['Spawn3-2'].spawning) {
+        var spawningCreep = Game.creeps[Game.spawns['Spawn3-2'].spawning.name];
+        Game.spawns['Spawn3-2'].room.visual.text(
+            '🛠️' + spawningCreep.memory.role,
+            Game.spawns['Spawn3-2'].pos.x + 1,
+            Game.spawns['Spawn3-2'].pos.y,
             {align: 'left', opacity: 0.8});
     }
     if(Game.spawns['Spawn4'].spawning) {
@@ -593,13 +634,13 @@ module.exports.loop = function () {
     link2Controller.run(uploadLink2)
     const transferLink3 = Game.getObjectById('5ceb0953884d4806aa562312')
     link4Controller.run(transferLink3)
-    // Creep run scripts
+    Creep run scripts
     
         
-    // for (var flag in Game.flags){
-    //     var flagName = Game.flags[flag]
-    //     console.log(flagName.pos)
-    // }
+    for (var flag in Game.flags){
+        var flagName = Game.flags[flag]
+        console.log(flagName.pos)
+    }
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
@@ -654,9 +695,9 @@ module.exports.loop = function () {
         if(creep.memory.role == 'pioneerUpgrader') {
             rolePioneerUpgrader.run(creep);
         }
-        if(creep.memory.role == 'pioneerTurretUpgrader') {
-            rolePioneerTurretUpgrader.run(creep);
-        }
+        // if(creep.memory.role == 'pioneerTurretUpgrader') {
+        //     rolePioneerTurretUpgrader.run(creep);
+        // }
         if(creep.memory.role == 'pioneerTransport') {
             rolePioneerTransport.run(creep);
         }
@@ -681,11 +722,11 @@ module.exports.loop = function () {
         if(creep.memory.role == 'pioneerTransport2') {
             rolePioneerTransport2.run(creep);
         }
-        if(creep.memory.role == 'pioneerTurretUpgrader2') {
-            rolePioneerTurretUpgrader2.run(creep);
-        }
         if(creep.memory.role == 'pioneerTurretUpgrader3') {
             rolePioneerTurretUpgrader3.run(creep);
+        }
+        if(creep.memory.role == 'pioneerTurretUpgrader4') {
+            rolePioneerTurretUpgrader4.run(creep);
         }
         if(creep.memory.role == 'pioneerUpgradeRunner') {
             rolePioneerUpgradeRunner.run(creep);

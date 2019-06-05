@@ -242,13 +242,13 @@ const creepPhalanxSpawn = (creepRole, creepRoles, spawnCount, gameRoom, spawnLoc
         
         if (creepRoles.length < spawnCount && altEnergy <= Game.rooms[gameRoom].energyAvailable) {
             var newName = creepRole + Game.time;
-            const testSpawn = Game.spawns[spawnLoc].spawnCreep([ ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE ], newName,
+            const testSpawn = Game.spawns[spawnLoc].spawnCreep([ MOVE ], newName,
                 { dryRun: true })
             
             if(testSpawn == OK) {
                 console.log(creepRole + "s: " + creepRoles.length)
                 console.log('Spawning new ' + creepRole + " " + newName);
-                const result = Game.spawns[spawnLoc].spawnCreep([ ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE ], newName,
+                const result = Game.spawns[spawnLoc].spawnCreep([ MOVE ], newName,
                         {memory: {role: creepRole}})
                     if (result != OK) {
                         console.log("error code: " + result);

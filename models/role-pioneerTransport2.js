@@ -3,7 +3,7 @@ var rolePioneerTransport2 = {
         const mainStorage = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_STORAGE) &&
-                (structure.id == '5cd8e3d94586281e0e62940b' || structure.id == '5ce88ef0e0ecee147c3edaec')
+                (structure.id == '5cd8e3d94586281e0e62940b' || structure.id == '5ce88ef0e0ecee147c3edaec' || structure.id == '5cc2b2eec7b3a60e58b6642d')
             }
         })
         const transferLinks = creep.room.find(FIND_STRUCTURES, {
@@ -21,14 +21,14 @@ var rolePioneerTransport2 = {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&
                 (structure.store[RESOURCE_ENERGY] >= 0) &&
-                (structure.id == '5cd6a892e414c27d69354bf1' || structure.id == '5cc9fc2c5bdcc824ce25115b')
+                (structure.id == '5cd6a892e414c27d69354bf1' || structure.id == '5ce8c173f6835b34054a9de2' || structure.id == '5cc268da770d0403189fb47a')
             }
         })
         const sourceContainer = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&
                 (structure.store[RESOURCE_ENERGY] >= creep.carryCapacity - creep.carry.energy) &&
-                (structure.id !== '5cd6a892e414c27d69354bf1' && structure.id !== '5cc9fc2c5bdcc824ce25115b' && structure.id !== '5ce8c173f6835b34054a9de2')
+                (structure.id !== '5cd6a892e414c27d69354bf1' && structure.id !== '5ce8c173f6835b34054a9de2' && structure.id !== '5cc268da770d0403189fb47a')
             }
         })
         const nodes = creep.room.find(FIND_STRUCTURES, {
@@ -37,12 +37,14 @@ var rolePioneerTransport2 = {
                     structure.energy < structure.energyCapacity;
             }
         });
+
         const towers = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return structure.structureType == STRUCTURE_TOWER &&
                 structure.energy < structure.energyCapacity-300;
             }
         });
+        
 
         if(locatedTombstones.length > 0) {
             for(let i = 0; i < locatedTombstones.length; i++) {
@@ -58,7 +60,6 @@ var rolePioneerTransport2 = {
                     }
                 }
             };
-
         if(creep.memory.transporting && creep.carry.energy == 0) {
             creep.memory.transporting = false;
             creep.say('loading');
@@ -69,24 +70,26 @@ var rolePioneerTransport2 = {
         };
         
         if(!creep.memory.transporting) {
-            if(looseEnergyToPickUp.length > 0) {
-                if(creep.pickup(looseEnergyToPickUp[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(looseEnergyToPickUp[0], {visualizePathStyle: {stroke: '##0000FF'}})
-                }        
-            }
-            else if(sourceTombs.length > 0) {
+            // if(looseEnergyToPickUp.length > 0) {
+            //     if(creep.pickup(looseEnergyToPickUp[0]) == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(looseEnergyToPickUp[0], {visualizePathStyle: {stroke: '##0000FF'}})
+            //     }        
+            // }
+            // else 
+            if(sourceTombs.length > 0) {
                 if(creep.withdraw(sourceTombs[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sourceTombs[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    creep.moveTo(sourceTombs[0], {maxRooms: 1, visualizePathStyle: {stroke: '#ffaa00'}});
                  }  
             } 
-    	    else if(transferLinks.length > 0 && transferLinks[0].energy > 0) {
+    	    if(transferLinks.length > 0 && transferLinks[0].energy > 0) {
                 if(creep.withdraw(transferLinks[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(transferLinks[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    creep.moveTo(transferLinks[0], {maxRooms: 1, visualizePathStyle: {stroke: '#ffaa00'}});
                  }        
     	    }
     	    else if(sourceContainer.length > 0) {
-                if(creep.withdraw(sourceContainer[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sourceContainer[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+    	        const end = sourceContainer.length-1
+                if(creep.withdraw(sourceContainer[end], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sourceContainer[end], {visualizePathStyle: {stroke: '#ffaa00'}});
                  }        
     	    }
         }

@@ -2,7 +2,7 @@ var roleMineralMiner = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-            var hydrogen = Game.getObjectById('5bbcb1fa40062e4259e93566');
+            var hydrogen = creep.room.find(FIND_MINERALS);
             const mainStorage = Game.getObjectById('5cc2b2eec7b3a60e58b6642d')
             const hydroLab = Game.getObjectById('5ccc8837c0d7300bba218ff4')
             const total = _.sum(creep.carry)
@@ -19,8 +19,8 @@ var roleMineralMiner = {
     	    
             
             if (!creep.memory.mining) {
-                if(creep.harvest(hydrogen) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(hydrogen, {visualizePathStyle: {stroke: '#ffaa00'}});
+                if(creep.harvest(hydrogen[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(hydrogen[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }  
             }
                 else {

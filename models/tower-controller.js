@@ -50,7 +50,7 @@ var towerController = {
         if(tower.energy > 0) {
             if(attackTargets.length > 0) {
                 tower.attack(attackTargets[0])
-            }
+            } 
             else if(closeRepairTargets.length > 0) {
                 tower.repair(closeRepairTargets[0])
             }

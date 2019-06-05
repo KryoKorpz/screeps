@@ -65,10 +65,11 @@ var rolePioneerWorker = {
                     }
                 }
         }
+        
         const sourceContainers = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&
-                (structure.id == '5ce7e0e3968e0233f99ae90f' || structure.id == '5ce7e4d8219d1f4107e0af08' || structure.id == '5cd6a892e414c27d69354bf1') &&
+                (structure.id !== '5cc268da770d0403189fb47a' || structure.id !== '5cd6a892e414c27d69354bf1' || structure.id !== '5ce8c173f6835b34054a9de2') &&
                 structure.store[RESOURCE_ENERGY] >= 400;
             }
         })
@@ -100,15 +101,20 @@ var rolePioneerWorker = {
                     creep.moveTo(sourceTombsNearby[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }  
             }
-            else if(looseEnergyNearby.length > 0) {
-                if(creep.pickup(looseEnergyNearby[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(looseEnergyNearby[0], {visualizePathStyle: {stroke: '##0000FF'}})
-                }
-            }
+            // else if(looseEnergyNearby.length > 0) {
+            //     if(creep.pickup(looseEnergyNearby[0]) == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(looseEnergyNearby[0], {visualizePathStyle: {stroke: '##0000FF'}})
+            //     }
+            // }
 
     	    else if(sourceContainers.length > 0) {
     	       if(creep.withdraw(sourceContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sourceContainers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            }
+            else if(looseEnergyToPickUp.length > 0) {
+                if(creep.pickup(looseEnergyToPickUp[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(looseEnergyToPickUp[0], {visualizePathStyle: {stroke: '##0000FF'}})
                 }
             }
             else if(sourceTombs.length > 0) {
@@ -116,12 +122,7 @@ var rolePioneerWorker = {
                     creep.moveTo(sourceTombs[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }  
             }
-            else if(looseEnergyToPickUp.length > 0) {
-                if(creep.pickup(looseEnergyToPickUp[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(looseEnergyToPickUp[0], {visualizePathStyle: {stroke: '##0000FF'}})
-                }
-            }
-            if(mainStorage.length > 0 && mainStorage[0].store[RESOURCE_ENERGY] > 0) {
+            else if(mainStorage.length > 0 && mainStorage[0].store[RESOURCE_ENERGY] > 0) {
     	       if(creep.withdraw(mainStorage[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(mainStorage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
@@ -133,20 +134,21 @@ var rolePioneerWorker = {
             //     }  
             // }
         } else {
-                if(extensions.length > 0) {
-                    if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                    }
-                }
-                else if (roomController[0].ticksToDowngrade < 10000) {
+                // if(extensions.length > 0) {
+                //     if(creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                //         creep.moveTo(extensions[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                //     }
+                // }
+                // else 
+                if (roomController[0].ticksToDowngrade < 10000) {
                     creep.memory.role = 'pioneerUpgrader'
                 }
                 else if (repairTargets.length > 0) {
                     creep.memory.role = 'pioneerRepairer'
                 }
-                else if ( towers.length > 0){
-                    creep.memory.role = 'pioneerTower'
-                }
+                // else if ( towers.length > 0){
+                //     creep.memory.role = 'pioneerTower'
+                // }
                 else if ( constructionSites.length > 0) {
                     creep.memory.role = 'pioneerBuilder'
                 }

@@ -11,7 +11,7 @@ var rolePioneerUpgradeRunner = {
 	        const upgradeContainer = creep.room.find(FIND_STRUCTURES, {
 	            filter: (structure) => {
 	                return (structure.structureType == STRUCTURE_CONTAINER) &&
-	                (structure.id == '5cd6a892e414c27d69354bf1' || structure.id == '5ce89299a2bc0c1482e76390')
+	                (structure.id == '5cd6a892e414c27d69354bf1' || structure.id == '5ce8c173f6835b34054a9de2' || structure.id == '5cc268da770d0403189fb47a')
 	            }
 	        })
             if(mainStorage.length > 0 && creep.carry.energy < 50) {

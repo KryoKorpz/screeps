@@ -12,7 +12,7 @@ var roleCreepKiller = {
                 creep.moveTo(target);
             }
         } else {
-            creep.moveTo(30,15)
+            creep.moveTo(17,45)
         }
     }
 };

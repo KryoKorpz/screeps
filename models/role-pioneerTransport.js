@@ -19,7 +19,7 @@ var rolePioneerTransport = {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&
                 (structure.store[RESOURCE_ENERGY] >= 0) &&
-                (structure.id != '5cd6a892e414c27d69354bf1' && structure.id != '5cc9fc2c5bdcc824ce25115b')
+                (structure.id !== '5cd6a892e414c27d69354bf1' && structure.id !== '5cc9fc2c5bdcc824ce25115b')
             }
         })
 

@@ -1,6 +1,7 @@
 var roleMiner3 = {
     
     run: function(creep) {
+
         creep.moveTo(42,25)
         const links = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -23,9 +24,9 @@ var roleMiner3 = {
         // else 
         // {
             const sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(42, 25, {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(42, 25, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
         // }
     }
 };

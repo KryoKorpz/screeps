@@ -1,4 +1,4 @@
-var rolePioneerTurretUpgrader2 = {
+var rolePioneerTurretUpgrader3 = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -32,4 +32,4 @@ var rolePioneerTurretUpgrader2 = {
     }
 };
 
-module.exports = rolePioneerTurretUpgrader2;
+module.exports = rolePioneerTurretUpgrader3;
